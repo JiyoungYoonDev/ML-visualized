@@ -1,0 +1,83 @@
+---
+title: 'Intros'
+order: 0
+summary: 'Online learning flow + notation (M vs m) + why mistake bounds matter.'
+---
+
+# Mistake-Bounded Learning: Intro
+
+Think of this like **daily predictions**.
+Every day (round) you guess first, then reality tells you if you were wrong.
+
+---
+
+## The round flow (1 → 2 → 3)
+
+1. Experts give advice: <Math math="x_i(t)\\in\\{0,1\\}" />
+2. Learner predicts: <Math math="\\hat{y}(t)\\in\\{0,1\\}" />
+3. True label is revealed: <Math math="y(t)\\in\\{0,1\\}" />
+4. If wrong → **mistake counter increases** and we update our strategy
+
+---
+
+## The two numbers we care about
+
+### Learner mistakes: <Math math="M" />
+
+<Math block math={'M=\\sum_{t=1}^{T}\\mathbb{1}[\\hat{y}(t)\\neq y(t)]'} />
+
+- <Math math='M' /> = total number of times **you** were wrong over
+  <Math math='T' /> rounds.
+
+### Best expert mistakes: <Math math="m" />
+
+<Math block math={'m=\\min_{i}\\sum_{t=1}^{T}\\mathbb{1}[x_i(t)\\neq y(t)]'} />
+
+- <Math math='m' /> = mistakes made by the **best expert in hindsight** (“If I
+  had followed only one expert from the start, who would have been best?”)
+
+---
+
+## Why do we compare <Math math="M" /> vs <Math math="m" />?
+
+Because we want a learner that performs **almost as well as the best expert**,
+even if the data sequence is adversarial.
+
+A typical guarantee looks like:
+
+<Math block math={'M \\le \\alpha\\, m + \\beta\\,\\log n'} />
+
+- <Math math='n' /> = number of experts
+- <Math math='\\log n' /> is the “cost of not knowing in advance which expert is
+  best”
+
+> You don’t need to memorize this form yet.  
+> Just remember: **we want M close to m** + small overhead.
+
+---
+
+<QuizBlock
+  question='If you are on /intro and you made 7 mistakes in total so far, which symbol represents this number?'
+  options={['m', 'M', 'n', 't']}
+  answerIndex={1}
+  explanation="M is the learner's total mistakes. m is the best expert's mistakes (in hindsight)."
+/>
+
+<QuizBlock
+  question='Why do we compare M to m?'
+  options={[
+    'Because m is the true label',
+    'To see if we do nearly as well as the best expert in hindsight',
+    'Because m counts rounds',
+    'Because it makes proofs shorter',
+  ]}
+  answerIndex={1}
+  explanation='m measures the best single expert (in hindsight). A good online algorithm keeps its mistakes close to that benchmark.'
+/>
+
+---
+
+## Next
+
+Next lesson: **Weighted Majority**  
+We’ll build an algorithm that updates expert weights so the total mistakes stay bounded.

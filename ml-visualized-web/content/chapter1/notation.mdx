@@ -1,0 +1,149 @@
+---
+chapter: 'Chapter 1: Foundations'
+section: 'Bootcamps'
+title: 'Notation Bootcamp'
+order: 0
+slug: 'notation'
+summary: '수식 ↔ 문장 번역 훈련'
+icon: 'BookOpen'
+---
+
+# Notation Bootcamp (수식 ↔ 문장)
+
+> 목표: HW1에서 나오는 수식을 보고 **한국어 문장으로 즉시 번역**하고,  
+> 반대로 문장을 보면 **기호로 다시 쓸 수 있게** 만들기.
+
+---
+
+## 0) 가장 자주 나오는 4개 기호
+
+- <LatexMath math="t" />: round(라운드), 시간 step
+- <LatexMath math="T" />: 총 라운드 수
+- <LatexMath math="i" />: expert index
+- <LatexMath math="n" />: expert 개수
+
+---
+
+## 1) “표시함수”는 카운터(개수 세기)
+
+<LatexMath
+  block
+  math={
+    '\\mathbb{1}[\\text{condition}] = \\begin{cases}1 & \\text{if condition is true}\\\\0 & \\text{otherwise}\\end{cases}'
+  }
+/>
+
+### 문장으로
+
+- “조건이 맞으면 1, 아니면 0”
+- 그래서 **합으로 더하면 개수(count)가 된다**
+
+<QuizBlock
+  id='nb-1'
+  question='표시함수 1[조건]을 합으로 더하는 이유는?'
+  options={[
+    '확률을 구하기 위해',
+    '미분을 하기 위해',
+    '조건이 참인 횟수(개수)를 세기 위해',
+    '값을 정규화하기 위해',
+  ]}
+  answerIndex={2}
+  explanation='표시함수는 참이면 1이라서 sum으로 더하면 "횟수"가 된다.'
+/>
+
+---
+
+## 2) Learner vs Expert
+
+- expert i의 예측: <LatexMath math="x_i(t)\in\{0,1\}" />
+- learner 예측: <LatexMath math="\hat{y}(t)\in\{0,1\}" />
+- 정답: <LatexMath math="y(t)\in\{0,1\}" />
+
+### 문장으로 읽기
+
+- <LatexMath math="x_i(t)" />: “t번째 날에 i번째 expert가 낸 답”
+- <LatexMath math="\hat{y}(t)" />: “t번째 날에 내가(learner) 낸 답”
+- <LatexMath math="y(t)" />: “t번째 날의 실제 정답”
+
+---
+
+## 3) M과 m (HW1 핵심 1등)
+
+### Learner mistakes: M
+
+<LatexMath block math={'M=\\sum_{t=1}^{T}\\mathbb{1}[\\hat{y}(t)\\neq y(t)]'} />
+
+**문장 번역 템플릿**
+
+- “t=1부터 T까지, (내 예측이 정답과 다르면 1)을 더한 값”
+- 즉 **내 총 실수 횟수**
+
+### Best expert mistakes: m
+
+<LatexMath
+  block
+  math={'m=\\min_{i}\\sum_{t=1}^{T}\\mathbb{1}[x_i(t)\\neq y(t)]'}
+/>
+
+**문장 번역 템플릿**
+
+- “expert i를 하나 고정하고, 그 expert의 실수 횟수를 센 다음”
+- “그 중 최소를 고른 값”
+- 즉 **사후적으로(best in hindsight) 제일 잘한 expert 한 명의 실수**
+
+<QuizBlock
+  id='nb-2'
+  question='m은 무엇을 뜻해?'
+  options={[
+    'learner의 총 실수',
+    '정답 y(t)',
+    '사후적으로(best in hindsight) 가장 잘한 단일 expert의 실수',
+    'expert 수 n',
+  ]}
+  answerIndex={2}
+  explanation='m은 "한 명의 expert를 고정했을 때" 실수 횟수의 최소값.'
+/>
+
+---
+
+## 4) min vs argmin (자주 헷갈림)
+
+- <LatexMath math="\min_i g(i)" /> : 최소 **값(value)**
+- <LatexMath math="\arg\min_i g(i)" /> : 최소값을 만드는
+  **대상(index/parameter)**
+
+<QuizBlock
+  id='nb-3'
+  question='min_i 는 무엇을 리턴해?'
+  options={['최소값', '최소값을 만드는 i', '최대값', '확률']}
+  answerIndex={0}
+  explanation='min은 값(value)이다. argmin이 index/대상이다.'
+/>
+
+---
+
+## 5) (문장 → 기호) 훈련
+
+### 문장
+
+“나는 T라운드 동안 총 7번 틀렸다.”
+
+### 기호로
+
+- learner total mistakes는 <LatexMath math="M" />
+- 따라서 답: <LatexMath math="M=7" />
+
+<QuizBlock
+  id='nb-4'
+  question='문장: "사후적으로 best expert는 3번 틀렸다" → 어떤 기호?'
+  options={['M=3', 'm=3', 'n=3', 'T=3']}
+  answerIndex={1}
+  explanation='best expert mistakes는 m 이므로 m=3.'
+/>
+
+---
+
+## Next
+
+다음 페이지는 **Pattern Bootcamp**.  
+문제를 보면 “어떤 유형인지” 먼저 분류하고, 템플릿대로 푸는 훈련을 한다.

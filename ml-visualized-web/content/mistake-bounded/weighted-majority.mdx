@@ -1,0 +1,25 @@
+---
+title: 'Weighted Majority'
+order: 1
+summary: 'Weighted vote from experts + update rule.'
+---
+
+# Weighted Majority
+
+Experts give predictions <Math math="x_i(t)\\in\\{0,1\\}" />. Each expert has a weight <Math math="w_i(t)" />.
+
+## Rule (Math)
+
+Vote for label 1 using:
+
+<Math block math={'\\sum_{i:x_i(t)=1} w_i(t)'} />
+
+Vote for label 0 using:
+
+<Math block math={'\\sum_{i:x_i(t)=0} w_i(t)'} />
+
+Predict 1 if the 1-side is larger (else 0).
+
+## Interactive
+
+<Simulator id='wm-mini' />
