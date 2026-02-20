@@ -1,17 +1,20 @@
 import type React from 'react';
 
+export type LessonFeature = { label: string; slug: string };
 export type LessonMeta = {
   slug: string;
   title: string;
-  section?: string;
+  chapter: string;
+  section: string;
   group?: string;
-  order?: number;
+  order: number;
   summary?: string;
   navLabel?: string;
   iconKey?: string;
   badge?: string;
   disabled?: boolean;
   exact?: boolean;
+  features?: LessonFeature[];
 };
 
 export type LessonFrontmatter = {

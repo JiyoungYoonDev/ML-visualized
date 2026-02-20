@@ -1,6 +1,5 @@
-'use client';
-
 import { InlineMath, BlockMath } from 'react-katex';
+import { cn } from '@/lib/utils';
 
 type MathProps = {
   math: string;
@@ -17,12 +16,12 @@ export function LatexMath({ math, block = false, className }: MathProps) {
 
   if (block)
     return (
-      <div className={className}>
+      <div className={cn('text-foreground [&_.katex]:text-foreground', className)}>
         <BlockMath math={safeMath} />
       </div>
     );
   return (
-    <span className={className}>
+    <span className={cn('text-foreground [&_.katex]:text-foreground', className)}>
       <InlineMath math={safeMath} />
     </span>
   );

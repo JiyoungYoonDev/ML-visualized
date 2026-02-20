@@ -1,0 +1,176 @@
+---
+title: "Logistic Loss Optimization"
+summary: "Derive the gradient intuition for logistic loss and connect it to gradient descent updates."
+---
+
+# Logistic Loss Optimization
+
+<Block
+  label="Goal"
+  title="What are we optimizing?"
+  description="정답(y)을 높은 확률(p)로 만들고 싶다 → 그걸 loss 최소화로 바꾼다."
+>
+  <div className="space-y-3 text-sm text-muted-foreground">
+    <div>
+      We compute:
+      <LatexMath block math={'z = w^T x + b,\\quad p = \\sigma(z)'} />
+    </div>
+    <div className="rounded-lg border bg-muted/30 p-3">
+      직관: p가 정답 쪽으로 가도록 w,b를 조정하는 문제.
+    </div>
+  </div>
+</Block>
+
+<Block
+  label="Loss"
+  title="Logistic loss (binary cross-entropy)"
+  description="y=1이면 p가 커야 하고, y=0이면 p가 작아야 한다."
+>
+  <div className="space-y-3 text-sm text-muted-foreground">
+    <LatexMath
+      block
+      math={'\\ell(w,b;x,y)= -\\Big(y\\log p + (1-y)\\log(1-p)\\Big)'}
+    />
+    <ul className="list-disc pl-5 space-y-2">
+      <li>y=1일 때: loss는 <LatexMath math={'-\\log p'} />처럼 동작 → p가 1에 가까울수록 loss↓</li>
+      <li>y=0일 때: loss는 <LatexMath math={'-\\log(1-p)'} />처럼 동작 → p가 0에 가까울수록 loss↓</li>
+    </ul>
+  </div>
+</Block>
+
+<Block
+  label="Key identity"
+  title="The gradient becomes (p - y)"
+  description="시험/과제에서 자주 나오는 핵심: ‘로지스틱+로그’가 만나면 미분이 깔끔해진다."
+>
+  <div className="space-y-3 text-sm text-muted-foreground">
+    <div className="rounded-lg border bg-muted/30 p-4">
+      <div className="text-sm font-semibold text-foreground">Result (single example)</div>
+      <div className="mt-2">
+        <LatexMath block math={'\\frac{\\partial \\ell}{\\partial z} = p - y'} />
+      </div>
+      <div className="mt-2">
+        그리고 <LatexMath math={'z = w^T x + b'} /> 이므로
+      </div>
+      <div className="mt-2">
+        <LatexMath block math={'\\nabla_w\\,\\ell = (p-y)\\,x,\\quad \\frac{\\partial \\ell}{\\partial b} = (p-y)'} />
+      </div>
+    </div>
+
+    <div className="rounded-lg border bg-muted/30 p-4">
+      <div className="text-sm font-semibold text-foreground">Intuition</div>
+      <ul className="mt-2 list-disc pl-5 space-y-2">
+        <li>p &gt; y 이면 (너무 1쪽으로 확신) → (p-y) 양수 → w를 그 반대 방향으로 조금 밀어줌</li>
+        <li>p &lt; y 이면 (1이어야 하는데 확률이 낮음) → (p-y) 음수 → w를 정답 방향으로 끌어줌</li>
+        <li>즉 (p-y)는 “오차 신호”처럼 동작</li>
+      </ul>
+    </div>
+  </div>
+</Block>
+
+<Block
+  label="Update rule"
+  title="Gradient descent step"
+  description="이제 업데이트는 거의 외우는 수준으로 단순해져."
+>
+  <div className="space-y-3 text-sm text-muted-foreground">
+    <LatexMath
+      block
+      math={'w \\leftarrow w - \\eta\\,(p-y)x'}
+    />
+    <LatexMath
+      block
+      math={'b \\leftarrow b - \\eta\\,(p-y)'}
+    />
+    <div className="rounded-lg border bg-muted/30 p-3">
+      <div className="font-semibold text-foreground">How to read it</div>
+      <div className="mt-1">
+        “학습률 <LatexMath math={'\\eta'} /> 만큼, 오차 <LatexMath math={'(p-y)'} />와 입력 <LatexMath math={'x'} />를 곱한 방향으로 w를 조정한다.”
+      </div>
+    </div>
+  </div>
+</Block>
+
+<Block
+  label="Visualization"
+  title="See the sigmoid + decision boundary"
+  description="컴포넌트가 있으면 여기서 바로 ‘슬라이더로 w,b 바꾸면서 p가 어떻게 바뀌는지’ 보여주면 엄청 좋다."
+>
+  <div className="rounded-xl border bg-muted/30 p-4 text-sm text-muted-foreground">
+    <div className="font-semibold text-foreground">Option A (recommended)</div>
+    <div className="mt-1">
+      네가 이미 만든 <span className="font-mono">Simulator</span>가 로지스틱 시각화를 지원하면:
+    </div>
+    <div className="mt-3 rounded-lg border bg-card p-3">
+      {/* 준비되면 아래 주석을 풀고 Simulator props를 맞춰줘 */}
+      {/* <Simulator kind="logistic-regression" /> */}
+      <div className="text-xs text-muted-foreground">
+        (placeholder) Add a logistic-regression simulator here.
+      </div>
+    </div>
+
+    <div className="mt-4 font-semibold text-foreground">Option B (no custom component yet)</div>
+    <div className="mt-1">
+      지금은 “그래프/이미지”를 넣는 방식으로도 OK. 나중에 인터랙티브로 업그레이드.
+    </div>
+  </div>
+</Block>
+
+<Block
+  label="Quizzes"
+  title="HW-style checks"
+  description="여기 퀴즈는 ‘미분 결과를 외우는’ 게 아니라 ‘읽을 수 있는지’를 체크."
+>
+  <QuizBlock
+    question="What is the key gradient identity for logistic loss with respect to z?"
+    options={[
+      "∂ℓ/∂z = y - p",
+      "∂ℓ/∂z = p - y",
+      "∂ℓ/∂z = p + y",
+      "∂ℓ/∂z = 0"
+    ]}
+    answerIndex={1}
+    explanation="For logistic loss with sigmoid, the clean identity is ∂ℓ/∂z = p - y."
+  />
+
+  <div className="mt-4" />
+
+  <QuizBlock
+    question="Given ∇w ℓ = (p-y)x, what happens if p is much larger than y?"
+    options={[
+      "p-y is negative, so w increases in direction of x",
+      "p-y is positive, so w decreases in direction of x",
+      "p-y is zero, so no update happens",
+      "We must increase η to fix it"
+    ]}
+    answerIndex={1}
+    explanation="If p>y, then (p-y)>0, and w ← w - η(p-y)x decreases along x."
+  />
+
+  <div className="mt-4" />
+
+  <QuizBlock
+    question="Choose the correct gradient descent update for w (single example)."
+    options={[
+      "w ← w + η(p-y)x",
+      "w ← w - η(p-y)x",
+      "w ← w - η(y-p)x",
+      "w ← w - ηx"
+    ]}
+    answerIndex={1}
+    explanation="Standard GD: w ← w - η ∇wℓ = w - η(p-y)x."
+  />
+</Block>
+
+<Block
+  label="Study pattern"
+  title="How to solve HW questions fast"
+  description="HW에서 로지스틱은 항상 이 루틴으로 푼다."
+>
+  <ol className="list-decimal pl-5 space-y-2 text-sm text-muted-foreground">
+    <li>문제에서 <LatexMath math={'z=w^Tx+b'} /> 가 있는지 확인</li>
+    <li><LatexMath math={'p=\\sigma(z)'} /> 로 연결</li>
+    <li>loss가 cross-entropy면 미분 결과가 <LatexMath math={'(p-y)'} /> 형태로 떨어짐</li>
+    <li>업데이트는 <LatexMath math={'w \\leftarrow w - \\eta(p-y)x'} /></li>
+  </ol>
+</Block>

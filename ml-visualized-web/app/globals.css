@@ -67,3 +67,9 @@
     --chart-5: 340 75% 55%;
   }
 }
+
+/* Latex */
+.katex,
+.katex-display {
+  white-space: nowrap;
+}

@@ -337,6 +337,11 @@ export default function ModulesShell({
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <div className='min-h-screen'>
@@ -359,19 +364,25 @@ export default function ModulesShell({
         <main className='flex-1'>
           {/* Mobile top bar */}
           <div className='md:hidden border-b p-3 flex items-center gap-2'>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant='outline'>Menu</Button>
-              </SheetTrigger>
+            {isMounted ? (
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant='outline'>Menu</Button>
+                </SheetTrigger>
 
-              <SheetContent side='left' className='p-0 w-72'>
-                <SidebarContent
-                  nav={nav}
-                  collapsed={false}
-                  closeOnNavigate={() => {}}
-                />
-              </SheetContent>
-            </Sheet>
+                <SheetContent side='left' className='p-0 w-72'>
+                  <SidebarContent
+                    nav={nav}
+                    collapsed={false}
+                    closeOnNavigate={() => {}}
+                  />
+                </SheetContent>
+              </Sheet>
+            ) : (
+              <Button variant='outline' disabled>
+                Menu
+              </Button>
+            )}
 
             <div className='font-semibold'>Modules</div>
           </div>
