@@ -52,6 +52,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SigmoidClampDemo } from '@/components/lesson/simulators/SigmoidClampDemo';
 import { DecisionBoundaryPlot} from '@/components/lesson/simulators/DecisionBoundaryPlot';
+import GraphPlot from '@/components/lesson/simulators/GraphPlot';
 type TocItem = {
   id: string;
   text: string;
@@ -193,6 +194,12 @@ export default async function LessonFeaturePage({
   const idx = all.findIndex((x) => x.slug === lesson);
   const prev = idx > 0 ? all[idx - 1] : undefined;
   const next = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : undefined;
+  const featureIdx = features.findIndex((item) => item.slug === feature);
+  const prevFeature = featureIdx > 0 ? features[featureIdx - 1] : undefined;
+  const nextFeature =
+    featureIdx >= 0 && featureIdx < features.length - 1
+      ? features[featureIdx + 1]
+      : undefined;
   const tocItems = extractTocItems(featureDoc.content);
 
   const headingIdState = new Map<string, number>();
@@ -302,6 +309,7 @@ export default async function LessonFeaturePage({
                     AccordionContent,
                     SigmoidClampDemo,
                     DecisionBoundaryPlot,
+                    GraphPlot,
                     Separator: SectionSeparator,
                     Seperator: SectionSeparator,
                     h2: Heading2,
@@ -320,13 +328,19 @@ export default async function LessonFeaturePage({
         chapter='chapter1'
         slug={lesson}
         prev={
-          prev
-            ? { title: prev.title, href: `/modules/chapter1/${prev.slug}` }
+          prevFeature
+            ? {
+                title: prevFeature.label,
+                href: `/modules/chapter1/${lesson}/${prevFeature.slug}`,
+              }
             : undefined
         }
         next={
-          next
-            ? { title: next.title, href: `/modules/chapter1/${next.slug}` }
+          nextFeature
+            ? {
+                title: nextFeature.label,
+                href: `/modules/chapter1/${lesson}/${nextFeature.slug}`,
+              }
             : undefined
         }
       />

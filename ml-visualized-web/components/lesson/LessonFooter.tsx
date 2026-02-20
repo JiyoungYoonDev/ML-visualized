@@ -31,7 +31,7 @@ export default function LessonFooter({
   }, []);
 
   const completed = useMemo(() => done.includes(slug), [done, slug]);
-
+  console.log('LessonFooter render', { slug, prev, next, completed });
   return (
     <div className='mt-10 rounded-2xl border bg-card p-4 md:p-6 space-y-4'>
       <div className='flex flex-wrap items-center justify-between gap-3'>

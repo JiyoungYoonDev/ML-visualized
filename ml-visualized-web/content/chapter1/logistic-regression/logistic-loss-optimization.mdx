@@ -2,175 +2,154 @@
 title: "Logistic Loss Optimization"
 summary: "Derive the gradient intuition for logistic loss and connect it to gradient descent updates."
 ---
-
-# Logistic Loss Optimization
-
 <Block
-  label="Goal"
-  title="What are we optimizing?"
-  description="정답(y)을 높은 확률(p)로 만들고 싶다 → 그걸 loss 최소화로 바꾼다."
+  label="Context"
+  title="Logistic Regression Loss Optimization"
+  description="Let's dive into the math of logistic regression and see how the loss function leads to a simple gradient descent update rule."
 >
-  <div className="space-y-3 text-sm text-muted-foreground">
-    <div>
-      We compute:
-      <LatexMath block math={'z = w^T x + b,\\quad p = \\sigma(z)'} />
-    </div>
-    <div className="rounded-lg border bg-muted/30 p-3">
-      직관: p가 정답 쪽으로 가도록 w,b를 조정하는 문제.
-    </div>
-  </div>
-</Block>
-
-<Block
-  label="Loss"
-  title="Logistic loss (binary cross-entropy)"
-  description="y=1이면 p가 커야 하고, y=0이면 p가 작아야 한다."
->
-  <div className="space-y-3 text-sm text-muted-foreground">
-    <LatexMath
-      block
-      math={'\\ell(w,b;x,y)= -\\Big(y\\log p + (1-y)\\log(1-p)\\Big)'}
-    />
-    <ul className="list-disc pl-5 space-y-2">
-      <li>y=1일 때: loss는 <LatexMath math={'-\\log p'} />처럼 동작 → p가 1에 가까울수록 loss↓</li>
-      <li>y=0일 때: loss는 <LatexMath math={'-\\log(1-p)'} />처럼 동작 → p가 0에 가까울수록 loss↓</li>
-    </ul>
-  </div>
-</Block>
-
-<Block
-  label="Key identity"
-  title="The gradient becomes (p - y)"
-  description="시험/과제에서 자주 나오는 핵심: ‘로지스틱+로그’가 만나면 미분이 깔끔해진다."
->
-  <div className="space-y-3 text-sm text-muted-foreground">
-    <div className="rounded-lg border bg-muted/30 p-4">
-      <div className="text-sm font-semibold text-foreground">Result (single example)</div>
-      <div className="mt-2">
-        <LatexMath block math={'\\frac{\\partial \\ell}{\\partial z} = p - y'} />
+  <div className="space-y-12">
+    
+    {/* 1. Problem Definition */}
+    <div className="grid gap-8 md:grid-cols-2 items-start">
+      <div className="space-y-4">
+        <div className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+          The Binary Problem
+        </div>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Think of this as binary classification: we have two classes, <strong>0 and 1</strong>. The answer is simply True or False. 
+          When we guess, we want an Error of 0 for correct answers and a high penalty for wrong ones. 
+          To achieve this, we use the <strong>Logistic Loss</strong> (Binary Cross-Entropy).
+        </p>
+        <div className="rounded-xl border bg-card p-4 space-y-3 shadow-sm">
+          <p className="text-xs font-bold text-foreground">Key Definitions:</p>
+          <ul className="text-xs space-y-2 text-muted-foreground list-disc pl-4">
+            <li><LatexMath math="y" />: The true label (0 or 1)</li>
+            <li><LatexMath math="p" /> (or <LatexMath math="P" />): The predicted probability via Sigmoid</li>
+            <li><LatexMath math="z = w^Tx + b" />: The linear score</li>
+          </ul>
+        </div>
       </div>
-      <div className="mt-2">
-        그리고 <LatexMath math={'z = w^T x + b'} /> 이므로
-      </div>
-      <div className="mt-2">
-        <LatexMath block math={'\\nabla_w\\,\\ell = (p-y)\\,x,\\quad \\frac{\\partial \\ell}{\\partial b} = (p-y)'} />
+      
+      <div className="space-y-4">
+        <div className="rounded-2xl bg-slate-900 p-6 shadow-xl text-white">
+          <div className="mb-4 text-xs font-mono text-slate-400 uppercase tracking-widest text-center">Sigmoid Baseline</div>
+          <LatexMath block math='\sigma(z)=\frac{1}{1+e^{-z}}' className="text-white [&_.katex]:text-white" />
+          <p className="text-[10px] text-center text-slate-500 mt-4">Equation (1)</p>
+        </div>
       </div>
     </div>
 
-    <div className="rounded-lg border bg-muted/30 p-4">
-      <div className="text-sm font-semibold text-foreground">Intuition</div>
-      <ul className="mt-2 list-disc pl-5 space-y-2">
-        <li>p &gt; y 이면 (너무 1쪽으로 확신) → (p-y) 양수 → w를 그 반대 방향으로 조금 밀어줌</li>
-        <li>p &lt; y 이면 (1이어야 하는데 확률이 낮음) → (p-y) 음수 → w를 정답 방향으로 끌어줌</li>
-        <li>즉 (p-y)는 “오차 신호”처럼 동작</li>
-      </ul>
-    </div>
-  </div>
-</Block>
-
-<Block
-  label="Update rule"
-  title="Gradient descent step"
-  description="이제 업데이트는 거의 외우는 수준으로 단순해져."
->
-  <div className="space-y-3 text-sm text-muted-foreground">
-    <LatexMath
-      block
-      math={'w \\leftarrow w - \\eta\\,(p-y)x'}
-    />
-    <LatexMath
-      block
-      math={'b \\leftarrow b - \\eta\\,(p-y)'}
-    />
-    <div className="rounded-lg border bg-muted/30 p-3">
-      <div className="font-semibold text-foreground">How to read it</div>
-      <div className="mt-1">
-        “학습률 <LatexMath math={'\\eta'} /> 만큼, 오차 <LatexMath math={'(p-y)'} />와 입력 <LatexMath math={'x'} />를 곱한 방향으로 w를 조정한다.”
+    {/* 2. Loss Function Gallery: Comparing Properties */}
+    <div className="space-y-6">
+      <div className="text-center">
+        <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400">Loss Function Gallery</h4>
+        <p className="text-xs text-muted-foreground mt-1">Comparing the mathematical properties of common classifiers.</p>
       </div>
-    </div>
-  </div>
-</Block>
 
-<Block
-  label="Visualization"
-  title="See the sigmoid + decision boundary"
-  description="컴포넌트가 있으면 여기서 바로 ‘슬라이더로 w,b 바꾸면서 p가 어떻게 바뀌는지’ 보여주면 엄청 좋다."
->
-  <div className="rounded-xl border bg-muted/30 p-4 text-sm text-muted-foreground">
-    <div className="font-semibold text-foreground">Option A (recommended)</div>
-    <div className="mt-1">
-      네가 이미 만든 <span className="font-mono">Simulator</span>가 로지스틱 시각화를 지원하면:
-    </div>
-    <div className="mt-3 rounded-lg border bg-card p-3">
-      {/* 준비되면 아래 주석을 풀고 Simulator props를 맞춰줘 */}
-      {/* <Simulator kind="logistic-regression" /> */}
-      <div className="text-xs text-muted-foreground">
-        (placeholder) Add a logistic-regression simulator here.
+      <div className="grid gap-4 sm:grid-cols-3">
+        {/* Logistic Loss */}
+        <div className="rounded-xl border-2 border-blue-500 bg-white p-5 shadow-md relative overflow-hidden">
+          <div className="absolute top-0 right-0 bg-blue-500 text-white text-[9px] px-2 py-1 font-bold">FOCUS</div>
+          <div className="font-bold text-blue-600">Logistic Loss</div>
+          <div className="my-3 text-[11px] bg-slate-50 p-2 rounded font-mono">
+            <LatexMath math='l_{log}(z) = \log(1 + e^{-z})' />
+          </div>
+          <p className="text-[11px] text-muted-foreground">
+            <strong>Convex</strong> and easy to optimize. If <LatexMath math="y^iw^Tx_i < 0" />, prediction is incorrect and loss increases.
+          </p>
+        </div>
+
+        {/* Hinge Loss */}
+        <div className="rounded-xl border bg-card p-5 shadow-sm">
+          <div className="font-bold text-foreground">Hinge Loss</div>
+          <div className="my-3 text-[11px] bg-slate-50 p-2 rounded font-mono">
+            <LatexMath math='l_{hinge}(z) = \max(0, 1-z)' />
+          </div>
+          <p className="text-[11px] text-muted-foreground">
+            Used in SVMs. Penalizes wrong predictions and those that aren't confident enough. If loss $\le 0$, it's correct and confident.
+          </p>
+        </div>
+
+        {/* Exponent Loss */}
+        <div className="rounded-xl border bg-card p-5 shadow-sm">
+          <div className="font-bold text-foreground">Exponent Loss</div>
+          <div className="my-3 text-[11px] bg-slate-50 p-2 rounded font-mono">
+            <LatexMath math='l_{exp}(z) = e^{-z}' />
+          </div>
+          <p className="text-[11px] text-muted-foreground">
+            Used in AdaBoost. <strong>Convex</strong> but more sensitive to outliers. Loss $> 1$ means prediction is incorrect.
+          </p>
+        </div>
+      </div>
+
+      <div className="p-4 bg-slate-50 rounded-xl border border-dashed text-center">
+        <GraphPlot dataUrl="/data/loss_funcs_compare.json" />
+        <p className="text-[10px] text-slate-400 mt-2 uppercase">Visualization of Loss Curves vs. Margin</p>
       </div>
     </div>
 
-    <div className="mt-4 font-semibold text-foreground">Option B (no custom component yet)</div>
-    <div className="mt-1">
-      지금은 “그래프/이미지”를 넣는 방식으로도 OK. 나중에 인터랙티브로 업그레이드.
+    {/* 3. The Power of Logarithms */}
+    <div className="rounded-2xl border bg-blue-50/30 p-6 md:p-8">
+      <div className="flex flex-col md:flex-row gap-8 items-center">
+        <div className="flex-1 space-y-4">
+          <h4 className="text-lg font-bold text-blue-900 flex items-center gap-2">
+            Why the Log Function?
+          </h4>
+          <p className="text-sm leading-relaxed">
+            Log transforms the loss into a manageable, <strong>convex</strong> form. It enforces a massive penalty for "confident mistakes." 
+            If <LatexMath math="y=1" /> but <LatexMath math="P \to 0" />, the loss approaches infinity because:
+          </p>
+          <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
+            <LatexMath block math='\begin{cases} \lim_{x \to 0^+} \log(x) = -\infty \\ \log(1) = 0 \end{cases}' />
+          </div>
+        </div>
+        <div className="flex-none text-sm space-y-2">
+           <div className="bg-white p-3 rounded-lg border border-blue-100">
+              <span className="font-bold text-green-600">P = y</span> → Low Loss
+           </div>
+           <div className="bg-white p-3 rounded-lg border border-blue-100">
+              <span className="font-bold text-red-600">P ≠ y</span> → High Loss
+           </div>
+        </div>
+      </div>
+    </div>
+
+    {/* 4. The Gradient Descent Engine */}
+    <div className="space-y-6">
+      <div className="border-l-4 border-green-500 pl-4">
+        <h3 className="text-xl font-black uppercase tracking-tight">The Update Engine: Gradient Descent</h3>
+        <p className="text-sm text-muted-foreground italic">Iteratively updating parameters $w$ and $b$ to reduce error.</p>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Error logic */}
+        <div className="bg-card border rounded-2xl p-6">
+          <div className="text-xs font-bold text-green-600 uppercase mb-4 tracking-widest text-center">1. Identify the Error</div>
+          <div className="text-center space-y-4">
+            <LatexMath block math='error = y - P' className="text-2xl font-black" />
+            <div className="text-xs space-y-2 text-muted-foreground">
+              <p><strong>Positive Error:</strong> <LatexMath math="P < y" />. We must increase <LatexMath math="P" />.</p>
+              <p><strong>Negative Error:</strong> <LatexMath math="P > y" />. We must decrease <LatexMath math="P" />.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Update Rule */}
+        <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-xl">
+          <div className="text-xs font-bold text-blue-400 uppercase mb-4 tracking-widest text-center">2. Apply Update Rules</div>
+          <div className="space-y-4">
+            <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+              <LatexMath block math='w \leftarrow w - \eta \nabla_w \ell' className="text-white [&_.katex]:text-white" />
+            </div>
+            <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+              <LatexMath block math='b \leftarrow b - \eta \frac{\partial \ell}{\partial b}' className="text-white [&_.katex]:text-white" />
+            </div>
+          </div>
+          <p className="text-[10px] text-slate-500 mt-4 italic text-center">
+            $\eta$ (Learning Rate) controls the size of each step.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-</Block>
-
-<Block
-  label="Quizzes"
-  title="HW-style checks"
-  description="여기 퀴즈는 ‘미분 결과를 외우는’ 게 아니라 ‘읽을 수 있는지’를 체크."
->
-  <QuizBlock
-    question="What is the key gradient identity for logistic loss with respect to z?"
-    options={[
-      "∂ℓ/∂z = y - p",
-      "∂ℓ/∂z = p - y",
-      "∂ℓ/∂z = p + y",
-      "∂ℓ/∂z = 0"
-    ]}
-    answerIndex={1}
-    explanation="For logistic loss with sigmoid, the clean identity is ∂ℓ/∂z = p - y."
-  />
-
-  <div className="mt-4" />
-
-  <QuizBlock
-    question="Given ∇w ℓ = (p-y)x, what happens if p is much larger than y?"
-    options={[
-      "p-y is negative, so w increases in direction of x",
-      "p-y is positive, so w decreases in direction of x",
-      "p-y is zero, so no update happens",
-      "We must increase η to fix it"
-    ]}
-    answerIndex={1}
-    explanation="If p>y, then (p-y)>0, and w ← w - η(p-y)x decreases along x."
-  />
-
-  <div className="mt-4" />
-
-  <QuizBlock
-    question="Choose the correct gradient descent update for w (single example)."
-    options={[
-      "w ← w + η(p-y)x",
-      "w ← w - η(p-y)x",
-      "w ← w - η(y-p)x",
-      "w ← w - ηx"
-    ]}
-    answerIndex={1}
-    explanation="Standard GD: w ← w - η ∇wℓ = w - η(p-y)x."
-  />
-</Block>
-
-<Block
-  label="Study pattern"
-  title="How to solve HW questions fast"
-  description="HW에서 로지스틱은 항상 이 루틴으로 푼다."
->
-  <ol className="list-decimal pl-5 space-y-2 text-sm text-muted-foreground">
-    <li>문제에서 <LatexMath math={'z=w^Tx+b'} /> 가 있는지 확인</li>
-    <li><LatexMath math={'p=\\sigma(z)'} /> 로 연결</li>
-    <li>loss가 cross-entropy면 미분 결과가 <LatexMath math={'(p-y)'} /> 형태로 떨어짐</li>
-    <li>업데이트는 <LatexMath math={'w \\leftarrow w - \\eta(p-y)x'} /></li>
-  </ol>
 </Block>

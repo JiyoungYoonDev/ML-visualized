@@ -56,7 +56,7 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export default async function LessonPage({
+export default async function MistakeBoundedLessonPage({
   params,
 }: {
   params: Promise<{ slug: string }>;

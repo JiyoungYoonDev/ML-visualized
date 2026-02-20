@@ -2,9 +2,7 @@
 title: 'Logistic Regression'
 features:
   - { label: 'Introduction', slug: 'introduction' }
-  - { label: 'Losses', slug: 'losses' }
-  - { label: 'Logistic Loss Optimization', slug: 'logistic-loss-optimization' }
-  - { label: 'Minimizing Logistic Loss', slug: 'minimizing-logistic-loss' }
+  - { label: 'Loss & Optimization', slug: 'logistic-loss-optimization' }
 summary: 'Classification model that turns a linear score into a probability using a sigmoid, then trains by minimizing logistic loss.'
 chapter: 'Chapter 1: Algorithms'
 section: 'Lectures'
@@ -28,247 +26,206 @@ icon: 'LineChart'
 </Prerequisites>
 
 <LearningOutcomes>
-  - Explain what logistic regression is and its use case. - Describe the three
-  main steps in the logistic regression pipeline. - Understand why we need
-  logistic regression instead of just a linear classifier. - Read and interpret
-  the mathematical notation used in logistic regression. - Explain what a margin
-  is in plain English and how it relates to the model's confidence. - Understand
-  the concept of logistic loss and how it penalizes wrong predictions. -
-  Describe how gradient descent updates the weights to minimize logistic loss. -
-  Compute logistic / hinge / exponential loss on small examples and explain the
-  differences. - Understand why these losses penalize "confident mistakes" more
-  than "less confident mistakes".
+  - Explain what logistic regression is and its use case.
+  - Describe the three main steps in the logistic regression pipeline.
+  - Understand why we need logistic regression instead of just a linear classifier.
+  - Read and interpret the mathematical notation used in logistic regression.
+  - Explain what a margin is in plain English and how it relates to the model's confidence.
+  - Understand the concept of logistic loss and how it penalizes wrong predictions.
+  - Describe how gradient descent updates the weights to minimize logistic loss.
+  - Compute logistic / hinge / exponential loss on small examples and explain the differences.
+  - Understand why these losses penalize "confident mistakes" more than "less confident mistakes".
 </LearningOutcomes>
+
 <Seperator />
 
 <Takeaway>
   <TakeawayItem value='concept-mastery' title='Concept Mastery'>
-    <div className='space-y-2'>
-      <p>
-        Logistic regression definition and how it differs from a plain linear
-        regression:
+    <div className='space-y-3'>
+      <p className="text-sm sm:text-base">
+        Logistic regression definition and how it differs from a plain linear regression:
       </p>
-      <ul className='list-disc pl-5 space-y-1'>
-        <li>
-          Logistic regression is a classification model that predicts
-          probabilities (ranging from 0 to 1) based on input x.
-        </li>
-        <li>
-          Linear regression predicts a continuous numerical value, such as house
-          prices or stock market indices.
-        </li>
-        <li>
-          Logistic regression predicts the likelihood of an event, such as the
-          probability of rain tomorrow, a spam email, or a disease diagnosis.
-        </li>
-        <li>
-          Key advantage: it provides more than just a binary label; it gives a
-          confidence level for the prediction.
-        </li>
+      <ul className='list-disc pl-5 space-y-2 text-sm sm:text-base'>
+        <li>Logistic regression is a classification model that predicts probabilities (ranging from 0 to 1) based on input x.</li>
+        <li>Linear regression predicts a continuous numerical value (e.g., house prices).</li>
+        <li>Logistic regression predicts the likelihood of an event (e.g., rain, spam, disease).</li>
+        <li>Key advantage: It provides a <strong>confidence level</strong> for the prediction.</li>
       </ul>
     </div>
   </TakeawayItem>
-  <TakeawayItem
-    value='why-logistic'
-    title='Why Logistic but not linear regression?'
-  >
-    <p>
-      The main reason we use logistic regression for classification instead of
-      linear regression is that logistic regression outputs probabilities
-      between 0 and 1, which can be interpreted as confidence levels for class
-      membership. Linear regression can output any real number, which is not
-      suitable for classification tasks where we need to assign discrete labels.
-    </p>
-    <p className='mt-2'>
-      Linear regression outputs an unbounded real value (−∞ to +∞), but a
-      classifier output is ideally a probability, which must lie in [0,1].
-      Values like −0.5 or 1.7 would mean “−50%” or “170%,” which are not valid
-      probabilities. (0–100% is the same scale as 0–1; we use 0–1 because it’s
-      the standard mathematical form.)
-    </p>
+
+  <TakeawayItem value='why-logistic' title='Why Logistic?'>
+    <div className="space-y-3 text-sm sm:text-base">
+      <p>
+        The main reason is that it outputs probabilities between 0 and 1. Linear regression can output any real number (e.g., -0.5 or 1.7), which is meaningless for "likelihood."
+      </p>
+      <p className='mt-2 italic text-muted-foreground'>
+        Valid probabilities must lie in [0,1]. Logistic regression ensures this "squashing" effect.
+      </p>
+    </div>
   </TakeawayItem>
+
   <TakeawayItem value='math-reading' title='Math Reading'>
-    <p>
-      Read symbols <LatexMath math='(\sigma, z, w)' /> and explain the
-      score-to-probability transformation.
+    <p className="text-sm sm:text-base">
+      Learn to read symbols like <LatexMath math='\sigma' />, <LatexMath math='z' />, and <LatexMath math='w' /> to understand how scores become probabilities.
     </p>
   </TakeawayItem>
+
   <TakeawayItem value='optimization' title='Optimization'>
-    <p>
-      Understand margin intuition and minimize loss with gradient descent
-      updates.
+    <p className="text-sm sm:text-base">
+      Understand <strong>margin intuition</strong> and how to minimize loss using <strong>gradient descent</strong> updates.
     </p>
   </TakeawayItem>
 </Takeaway>
+
 <Seperator />
 
 <WhatIsLectureCards
   title='What is logistic regression?'
-  description='A classification model that turns a linear score into a probability. The core idea is: “score → probability” using a sigmoid, then learn parameters by minimizing logistic loss so the probability matches the true label.'
+  description='A classification model that turns a linear score into a probability using a sigmoid function.'
 >
-  <WhatIsLectureCard title='Goal'>
-    Binary classification: predict the probability of an input belonging to
-    class 1 (vs class 0).
-  </WhatIsLectureCard>
-  <WhatIsLectureCard title='Output'>Probability</WhatIsLectureCard>
-  <WhatIsLectureCard title='Training'>Minimize logistic loss</WhatIsLectureCard>
+  <WhatIsLectureCard title='Goal'>Binary classification: Predict probability of Class 1 vs Class 0.</WhatIsLectureCard>
+  <WhatIsLectureCard title='Output'>Probability (0 to 1)</WhatIsLectureCard>
+  <WhatIsLectureCard title='Training'>Minimize logistic loss via Gradient Descent</WhatIsLectureCard>
 </WhatIsLectureCards>
+
 <Seperator />
 
 <NotationGuide>
+  {/* Input Vector x */}
   <NotationGuideItem 
     value='x' 
     title='Input vector: x' 
     formula='x \in \mathbb{R}^d' 
-    reading='Read: "x is a d-dimensional real-valued feature vector." Example: x = (age, income, clicks, ...).'
+    reading='Read: "x is a d-dimensional real-valued feature vector."'
   />
-    <NotationGuideItem 
-            value="wj" 
-            title_symbol="w_j"
-           title="Weight for feature j"          
-            formula="w_j" 
-            explanation="Represents how important feature j is for the prediction.">
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            
-            <div className="rounded-lg border bg-card p-3 shadow-sm">
-                <div className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Magnitude (Strength)
-                </div>
-                <p className="text-sm">
-                    The magnitude of <LatexMath math="w_j" /> indicates the strength of feature j's influence on the model's output. A larger <LatexMath math="|w_j|" /> means that feature j has a stronger impact on the model's predictions.
-                    <br />
-                    In general, features with larger absolute weights are more influential in determining the predicted probability.
-                </p>
-            </div>
 
-            <div className="rounded-lg border bg-card p-3 shadow-sm">
-                <div className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Sign (Direction)
-                </div>
+  {/* Weight w_j */}
+  <NotationGuideItem 
+    value="wj" 
+    title="Weight for feature j"
+    symbol="w_j"
+    formula="w_j" 
+    explanation="Represents how important feature j is for the prediction."
+  >
+    <div className="mt-4 grid gap-4 grid-cols-1 sm:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4 shadow-sm">
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Magnitude (Strength)</div>
+        <p className="text-xs sm:text-sm leading-relaxed">
+          The larger <LatexMath math="|w_j|" />, the stronger feature j's impact on the model's decision.
+        </p>
+      </div>
 
-                <ul className="space-y-3 text-sm">
-                <li className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2 font-bold text-blue-600">
-                    <span className="rounded bg-blue-50 px-1.5 py-0.5 text-xs">Positive</span>
-                    <LatexMath math="w_j > 0" />
-                    </div>
-                    <div className="pl-2 text-muted-foreground border-l-2 border-blue-100">
-                    As <LatexMath math="x_j \uparrow" />, then <LatexMath math="P(y=1) \uparrow" />
-                    <span className="ml-2 text-xs opacity-70">(Positive correlation)</span>
-                    </div>
-                </li>
+      <div className="rounded-xl border bg-card p-4 shadow-sm">
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Sign (Direction)</div>
+        <ul className="space-y-3 text-xs sm:text-sm">
+          <li className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 font-bold text-blue-600">
+              <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px]">Positive</span>
+              <LatexMath math="w_j > 0" />
+            </div>
+            <div className="pl-2 border-l-2 border-blue-100 text-muted-foreground">Higher feature value = Higher probability.</div>
+          </li>
+          <li className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 font-bold text-red-600">
+              <span className="rounded bg-red-50 px-1.5 py-0.5 text-[10px]">Negative</span>
+              <LatexMath math="w_j < 0" />
+            </div>
+            <div className="pl-2 border-l-2 border-red-100 text-muted-foreground">Higher feature value = Lower probability.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </NotationGuideItem>
 
-                <li className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2 font-bold text-red-600">
-                    <span className="rounded bg-red-50 px-1.5 py-0.5 text-xs">Negative</span>
-                    <LatexMath math="w_j < 0" />
-                    </div>
-                    <div className="pl-2 text-muted-foreground border-l-2 border-red-100">
-                    As <LatexMath math="x_j \uparrow" />, then <LatexMath math="P(y=1) \downarrow" />
-                    <span className="ml-2 text-xs opacity-70">(Inverse correlation)</span>
-                    </div>
-                </li>
-                </ul>
-            </div>
+  {/* Linear Score z */}
+  <NotationGuideItem
+    value='z'
+    title='Linear score: z'
+    formula='z = w^T x + b'
+    reading='Read: "z equals dot(w, x) plus bias b."'
+  >
+    <div className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+      <span className="font-semibold text-red-600">Weighted sum of features:</span> <LatexMath math='w^T x' /> represents the features combined. The bias <LatexMath math='b' /> shifts the boundary from the origin.
+    </div>
+  </NotationGuideItem>
 
-            </div>
-        </NotationGuideItem>
-
-        <NotationGuideItem
-            value='z'
-            title='Linear score: z'
-            formula='z = w^T x + b'
-            reading='Read: "z equals dot(w, x) plus bias b."'
-        >
-        TIP: <LatexMath math='w^T x' /> is read as "inner product of w and x" or <span className="text-red-600">"weighted sum of the features."</span> It represents the linear combination of the input features weighted by their corresponding parameters. The bias term <LatexMath math='b' /> allows the model to fit data that is not centered around the origin, effectively shifting the decision boundary."
-        </NotationGuideItem>
-
-        <NotationGuideItem
-        value='sigma'
-        title='Sigmoid Function: σ(z)'
-        formula='\sigma(z) = \frac{1}{1+e^{-z}}'
-        reading='Read: "sigma maps any real number into the range between 0 and 1."'
-        >
-        <div className="mt-4 space-y-4">
-            <div className="grid grid-cols-3 gap-2 text-center text-xs">
-            <div className="rounded-md border bg-slate-50 p-2">
-                <div className="font-bold text-red-500">z ≪ 0 (Very Small)</div>
-                <div>σ(z) ≈ <span className="font-bold text-foreground text-sm">0</span></div>
-            </div>
-            <div className="rounded-md border bg-slate-50 p-2 border-blue-200">
-                <div className="font-bold text-blue-500">z = 0 (Neutral)</div>
-                <div>σ(z) = <span className="font-bold text-foreground text-sm">0.5</span></div>
-            </div>
-            <div className="rounded-md border bg-slate-50 p-2">
-                <div className="font-bold text-green-500">z ≫ 0 (Very Large)</div>
-                <div>σ(z) ≈ <span className="font-bold text-foreground text-sm">1</span></div>
-            </div>
-            </div>
-
-            <div className="rounded-lg bg-muted/50 p-3 text-sm leading-relaxed border-l-4 border-slate-300">
-            <p className="font-medium text-foreground mb-1 italic">
-                "The Squashing Function"
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                <li>It takes any real-valued "score" <LatexMath math="z" /> and <span className="text-foreground font-semibold">squashes it into a probability</span> (0 to 1).</li>
-                <li>In classification, <LatexMath math="\sigma(z) > 0.5" /> usually means we predict <span className="text-foreground font-medium">Class 1</span>.</li>
-                <li>Essentially, it translates "raw model output" into "confidence level."</li>
-            </ul>
-            </div>
-
+  {/* Sigmoid Function */}
+  <NotationGuideItem
+    value='sigma'
+    title='Sigmoid Function: σ(z)'
+    formula='\sigma(z) = \frac{1}{1+e^{-z}}'
+    reading='Read: "sigma maps any real number into the range 0 to 1."'
+  >
+    <div className="mt-4 space-y-4">
+      <div className="grid grid-cols-1 gap-3 text-center text-[10px] sm:text-xs sm:grid-cols-3">
+        <div className="rounded-lg border bg-slate-50/50 p-3">
+          <div className="font-bold text-red-500 mb-1">z ≪ 0</div>
+          <div className="text-sm font-bold">σ(z) ≈ 0</div>
         </div>
-        </NotationGuideItem>
-
-    <NotationGuideItem
-        value='predict'
-        title='Prediction: ŷ (y-hat)'
-        formula='p = \sigma(z), \quad \hat{y} = \mathbb{1}[p \ge 0.5]'
-        reading='Read: "p is the probability. Predict y-hat as 1 if p is at least 0.5, otherwise predict 0."'
-        >
-        <div className="mt-4 space-y-4">
-            <div className="flex flex-col sm:flex-row gap-3 items-center justify-center py-2">
-            <div className="flex-1 w-full rounded-lg border bg-blue-50/50 p-3 text-center">
-                <div className="text-[10px] uppercase tracking-wider text-blue-600 font-bold mb-1">Probability</div>
-                <div className="text-sm font-semibold italic font-mono">p ≥ 0.5</div>
-                <div className="mt-2 text-xl font-bold text-blue-700">ŷ = 1</div>
-                <div className="text-[11px] text-blue-600/80 mt-1">(Positive Class)</div>
-            </div>
-
-            <div className="hidden sm:block text-slate-300">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </div>
-
-            <div className="flex-1 w-full rounded-lg border bg-slate-50 p-3 text-center">
-                <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Probability</div>
-                <div className="text-sm font-semibold italic font-mono">p &lt; 0.5</div>
-                <div className="mt-2 text-xl font-bold text-slate-700">ŷ = 0</div>
-                <div className="text-[11px] text-slate-500/80 mt-1">(Negative Class)</div>
-            </div>
-            </div>
-
-            <div className="rounded-lg bg-muted/40 p-3 text-sm space-y-3">
-            <div>
-                <span className="font-bold text-foreground inline-flex items-center gap-1">
-                <span className="text-blue-500">◈</span> The Indicator Function <LatexMath math="\mathbb{1}" />
-                </span>
-                <p className="text-muted-foreground mt-1">
-                This mathematical symbol acts like an <code className="text-xs bg-slate-200 px-1 rounded">if</code> statement. It outputs <strong>1</strong> if the condition inside the brackets is true, and <strong>0</strong> if it is false.
-                </p>
-            </div>
-
-            <div className="pt-2 border-t border-slate-200">
-                <span className="font-bold text-foreground inline-flex items-center gap-1">
-                <span className="text-blue-500">◈</span> The Decision Boundary
-                </span>
-                <p className="text-muted-foreground mt-1">
-                The <span className="text-foreground font-medium">0.5 <LatexMath math="\tau" />(Threshold)</span> is the default boundary. It represents the point where the model is equally likely to choose either class (where z = 0).
-                </p>
-            </div>
-            </div>
-
+        <div className="rounded-lg border bg-blue-50/30 p-3 border-blue-200">
+          <div className="font-bold text-blue-500 mb-1">z = 0</div>
+          <div className="text-sm font-bold">σ(z) = 0.5</div>
         </div>
-    </NotationGuideItem>
-    </NotationGuide>
+        <div className="rounded-lg border bg-slate-50/50 p-3">
+          <div className="font-bold text-green-500 mb-1">z ≫ 0</div>
+          <div className="text-sm font-bold">σ(z) ≈ 1</div>
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-muted/30 p-4 border-l-4 border-slate-300 text-xs sm:text-sm leading-relaxed">
+        <p className="font-semibold mb-2 italic">"The Squashing Function"</p>
+        <ul className="list-disc list-inside space-y-1.5 text-muted-foreground">
+          <li>Takes a "score" <LatexMath math="z" /> and maps it to a <strong>probability</strong> (0 to 1).</li>
+          <li>If <LatexMath math="\sigma(z) > 0.5" />, we usually predict <strong>Class 1</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </NotationGuideItem>
+
+  {/* Prediction y-hat */}
+  <NotationGuideItem
+    value='predict'
+    title='Prediction: ŷ (y-hat)'
+    formula='p = \sigma(z), \quad \hat{y} = \mathbb{1}[p \ge 0.5]'
+    reading='Read: "If p is at least 0.5, predict 1, else 0."'
+  >
+    <div className="mt-4 space-y-6">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+        <div className="w-full sm:flex-1 rounded-xl border bg-blue-50/30 p-4 text-center">
+          <div className="text-[10px] uppercase font-bold text-blue-600 mb-1 tracking-widest">Decision</div>
+          <div className="font-mono text-sm mb-2">p ≥ 0.5</div>
+          <div className="text-2xl font-black text-blue-700">ŷ = 1</div>
+        </div>
+
+        <div className="hidden sm:block text-slate-300">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+
+        <div className="w-full sm:flex-1 rounded-xl border bg-slate-50/50 p-4 text-center">
+          <div className="text-[10px] uppercase font-bold text-slate-500 mb-1 tracking-widest">Decision</div>
+          <div className="font-mono text-sm mb-2">p < 0.5</div>
+          <div className="text-2xl font-black text-slate-700">ŷ = 0</div>
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-muted/30 p-4 text-xs sm:text-sm space-y-4">
+        <div className="flex flex-col gap-2">
+          <span className="font-bold flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-blue-500" /> Indicator Function <LatexMath math="\mathbb{1}" />
+          </span>
+          <p className="text-muted-foreground">Like a code <code className="bg-slate-200 px-1 rounded">if</code> statement. 1 if true, 0 if false.</p>
+        </div>
+        <div className="pt-4 border-t border-slate-200 flex flex-col gap-2">
+          <span className="font-bold flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-green-500" /> Threshold (τ)
+          </span>
+          <p className="text-muted-foreground">Default is <strong>0.5</strong>, where score $z=0$.</p>
+        </div>
+      </div>
+    </div>
+  </NotationGuideItem>
+</NotationGuide>
 
 <Seperator />
 
@@ -277,77 +234,57 @@ icon: 'LineChart'
   divider
   label='Big picture'
   title='The Whole Process in 3 Steps'
-  description='3-step Process overview.'
 >
-  <PipelineSteps>
-    <PipelineStep
-      title='Score'
-      text='Calculating the Linear Score'
-      math='z = w^T x + b'
-    />
-    <PipelineStep
-      title='Probability'
-      text='Converting the score to a probability'
-      math='p = \sigma(z) = \frac{1}{1+e^{-z}}'
-    />
-    <PipelineStep
-      title='Predict'
-      text='Converting the probability to a binary prediction (0 or 1)'
-      math='\hat{y} = \mathbb{1}[p \ge 0.5]'
-    />
-  </PipelineSteps>
+  <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+    <PipelineSteps>
+      <PipelineStep title='Score' text='Calculating z' math='z = w^T x + b' />
+      <PipelineStep title='Probability' text='Applying Sigmoid' math='p = \sigma(z)' />
+      <PipelineStep title='Predict' text='Final Decision' math='\hat{y} = \mathbb{1}[p \ge 0.5]' />
+    </PipelineSteps>
+  </div>
 </Block>
+
 <Seperator />
 
 <Block
   bordered={false}
   divider
   label='Why do we need it?'
-  title='Why not just a linear classifier?'
-  description='From Scores to Probabilities: Enabling probabilistic interpretation and differentiable loss design'>
-
-  <div className='space-y-4 text-sm text-muted-foreground'>
-    <div className='rounded-xl border bg-muted/30 p-4'>
-      <div className='font-semibold text-foreground'>Main Concept</div>
-      <p>
-      Linear Regression outputs unbounded scores that are difficult to use for direct classification. Logistic Regression solves this by mapping these scores to a (0, 1) interval, providing a probabilistic interpretation that is essential for binary outcomes.
+  title='Why not just linear regression?'
+>
+  <div className='space-y-6'>
+    <div className='rounded-2xl border bg-blue-50/30 p-5'>
+      <div className='font-bold text-blue-900 mb-1'>Main Concept</div>
+      <p className="text-sm sm:text-base text-blue-800/80 leading-relaxed">
+        Linear regression outputs unbounded scores ($-\infty$ to $+\infty$). We need a way to map these to $(0, 1)$ to interpret them as <strong>probabilities</strong>.
       </p>
     </div>
 
-    <div className='grid gap-3 md:grid-cols-2'>
-      <div className='rounded-xl border p-4'>
-        <div className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-          Linear score (not a probability)
+    <div className='grid gap-4 grid-cols-1 md:grid-cols-2'>
+      <div className='rounded-2xl border p-5 bg-card shadow-sm'>
+        <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>Linear Score (Unbounded)</div>
+        <div className='bg-slate-50 rounded-lg p-3 overflow-x-auto scrollbar-hide'>
+          <LatexMath math={'z = w^T x + b \in (-\infty, +\infty)'} />
         </div>
-        <div className='mt-2'>
-          <LatexMath block math={'z = w^T x + b \\in (-\\infty, +\\infty)'} />
-        </div>
-        <ul className='mt-3 list-disc pl-5 space-y-1'>
-          <li>
-            The linear score z can take any real value, which is not suitable for classification tasks that require probabilities.
-            <span> because the output can be negative or greater than 1, which cannot be interpreted as probabilities.</span>
-          </li>
-          <li>
-            Example: “Probability = -0.5” is meaningless (probabilities represent the “likelihood” of an event, so they must be between 0 and 1)
-          </li>
+        <ul className='mt-4 list-disc pl-5 space-y-2 text-xs sm:text-sm text-muted-foreground'>
+          <li>Score can be anything. "Probability = -0.5" makes no sense.</li>
+          <li>We need to handle inputs consistently regardless of scale.</li>
         </ul>
       </div>
 
-      <div className='rounded-xl border p-4'>
-        <div className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-          Logistic (probability)
+      <div className='rounded-2xl border p-5 bg-card shadow-sm'>
+        <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>Logistic (Probabilistic)</div>
+        <div className='bg-slate-50 rounded-lg p-3 overflow-x-auto scrollbar-hide'>
+          <LatexMath math='p = \sigma(z) \in (0,1)' />
         </div>
-        <div className='mt-2'>
-          <LatexMath block math='p = \sigma(z) = \frac{1}{1+e^{-z}} \in (0,1)' />
-        </div>
-        <p>
-            Since the output is always between 0 and 1, we can interpret it as a probability. This allows us to frame 'maximizing the likelihood of the correct answer' as 'minimizing a loss function'.
+        <p className='mt-4 text-xs sm:text-sm text-muted-foreground leading-relaxed'>
+          Output is always in the valid range for probability. This allows us to use <strong>likelihood</strong> for training.
         </p>
       </div>
     </div>
-    </div>
-
+  </div>
 </Block>
+
 <Seperator />
 
 <Block
@@ -355,339 +292,232 @@ icon: 'LineChart'
   divider
   label='Key question'
   title='How do we train logistic regression?'
-  description='Turning raw scores into smooth probabilities.'
 >
-  {/* 1. The Bridge: Why Sigmoid? */}
-  <div className="grid gap-8 md:grid-cols-2 items-start">
-    <div className="space-y-4">
-      <div className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-        The Core Mechanism
-      </div>
-      <h4 className="text-xl font-bold italic text-foreground leading-snug">
-        "Can we switch from <LatexMath inline math='z' /> to <LatexMath inline math='p' /> without breaking our training algorithm?"
+  {/* Bridge Section */}
+  <div className="grid gap-8 grid-cols-1 lg:grid-cols-2 items-start">
+    <div className="space-y-5">
+      <div className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-[10px] font-bold text-blue-700 uppercase tracking-widest">The Problem</div>
+      <h4 className="text-xl font-black italic text-foreground tracking-tight leading-tight">
+        "Can we switch from $z$ to $p$ without breaking our math?"
       </h4>
-      <p className="text-sm leading-relaxed text-muted-foreground">
-        Yes! Instead of a hard, jagged jump, the **Sigmoid Function** provides a smooth, "S-shaped" curve. This smoothness is crucial because it makes the function <strong>differentiable</strong>, allowing Gradient Descent to "slide" down the curve to find the best weights.
+      <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
+        Yes! Instead of a jagged jump, the <strong>Sigmoid Function</strong> is smooth and <strong>differentiable</strong>. This allows Gradient Descent to "slide" down the curve to find the optimal weights.
       </p>
     </div>
     
-    <div className="space-y-4">
-      <div className="rounded-2xl bg-slate-900 p-6 shadow-xl text-white">
-        <div className="mb-4 text-xs font-mono text-slate-400 uppercase tracking-widest text-center">Sigmoid Curve Visual</div>
-        {/* DIAGRAM 1: THE S-CURVE */}
-        [Image of the sigmoid function graph showing the S-shaped curve between 0 and 1]
-        <div className="mt-4">
-        <LatexMath 
-            block 
-            math='\sigma(z) = \frac{1}{1+e^{-z}}' 
-            className="text-white [&_.katex]:text-white" 
-        />
-        </div>
+    <div className="rounded-3xl bg-slate-900 p-6 sm:p-8 shadow-2xl text-white">
+      <div className="mb-6 text-[10px] font-mono text-slate-400 uppercase tracking-widest text-center">Sigmoid Curve Mapping</div>
+      <div className="overflow-x-auto scrollbar-hide pb-4">
+        <LatexMath block math='\sigma(z) = \frac{1}{1+e^{-z}}' className="text-white [&_.katex]:text-white" />
+      </div>
+      {/* DIAGRAM 1 Placeholder */}
+      <div className="mt-4 border border-white/10 rounded-xl p-4 bg-white/5 italic text-[10px] text-center text-slate-400">
+        [Image: Smooth S-Curve plotting Probability vs Score]
       </div>
     </div>
   </div>
 
-{/* 2. Notation Building Blocks */}
-
-<div className='mt-12'>
-  <div className='text-center mb-8'>
-    <h4 className='text-sm font-bold uppercase tracking-widest text-slate-400'>
-      The Variables of Logic
-    </h4>
-  </div>
-  <div className='grid gap-4 sm:grid-cols-3'>
-    {[
-      {
-        label: 'Input (x)',
-        desc: 'The data points (e.g., Study Hours).',
-        color: 'bg-purple-50 text-purple-600',
-      },
-      {
-        label: 'Weights (w)',
-        desc: 'The "volume knob" for each feature.',
-        color: 'bg-amber-50 text-amber-600',
-      },
-      {
-        label: 'Bias (b)',
-        desc: 'The "starting line" of the model.',
-        color: 'bg-blue-50 text-blue-600',
-      },
-    ].map((item) => (
-      <div
-        key={item.label}
-        className='group rounded-xl border bg-card p-5 shadow-sm transition-all hover:border-blue-200 hover:shadow-md'
-      >
-        <div
-          className={cn(
-            'w-10 h-10 rounded-lg flex items-center justify-center text-xl mb-3',
-            item.color,
-          )}
-        >
-          {item.icon}
-        </div>
-        <div className='font-bold text-foreground'>{item.label}</div>
-        <div className='text-xs text-muted-foreground mt-1 leading-relaxed'>
-          {item.desc}
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-
-{/* 3. Decision Boundary Visual */}
-<div className="mt-8 rounded-2xl border border-dashed p-6 bg-slate-50/50">
-  {/* Top: Text Content */}
-  <div className="mb-6 space-y-4 text-center max-w-2xl mx-auto">
-    <div className="flex items-center justify-center gap-2 font-bold text-lg">
-      Visualizing the Boundary
-    </div>
-    <p className="text-sm text-muted-foreground leading-relaxed">
-      The <strong>Decision Boundary</strong> is the "Tipping Point" where the model is perfectly undecided (50/50). 
-      In this 2D feature space, it appears as a straight line separating our classes.
-    </p>
-    <div className="flex flex-wrap justify-center gap-4 text-xs">
-      <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border shadow-sm">
-        <span className="h-2 w-2 rounded-full bg-blue-500" />
-        <span className="font-medium text-slate-600">Boundary: $z = 0$ ($p = 0.5$)</span>
-      </div>
-      <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border shadow-sm">
-        <span className="h-2 w-2 rounded-full bg-green-500" />
-        <span className="font-medium text-slate-600">Above: $z > 0$ (Predict Pass)</span>
-      </div>
-    </div>
-  </div>
-
-  {/* Bottom: The Plot */}
-  <div className="relative rounded-xl bg-white p-4 shadow-md border overflow-hidden min-h-[350px]">
-    {/* Ensure your DecisionBoundaryPlot has a defined height inside */}
-    <DecisionBoundaryPlot w1={0.5} w2={0.1} b={-5} />
-    
-    <div className="absolute bottom-4 left-0 right-0 text-center">
-      <p className="text-[10px] text-slate-400 font-mono uppercase tracking-widest">
-        Live Prediction Space: $0.5x_1 + 0.1x_2 - 5 = 0$
-      </p>
-    </div>
-  </div>
-</div>
-{/* 4. Execution Pipeline (The Full Walkthrough) */}
-
+  {/* Execution Pipeline */}
   <div className="mt-16">
-    <div className="border-l-4 border-blue-500 pl-4 mb-8">
-      <h3 className="text-lg font-bold uppercase tracking-tight">Pipeline Walkthrough: Student 001</h3>
-      <p className="text-sm text-muted-foreground italic">Follow the data as it transforms from numbers to a "Pass" prediction.</p>
+    <div className="border-l-4 border-blue-500 pl-4 mb-10">
+      <h3 className="text-xl font-black uppercase tracking-tight">Pipeline Walkthrough: Student 001</h3>
+      <p className="text-sm text-muted-foreground">Mapping "Study Hours" to "Pass Probability"</p>
     </div>
 
-    {/* 4. Execution Pipeline (The Full Walkthrough) */}
-    <div className="mt-16 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
-    {/* Header */}
-    <div className="bg-slate-800 px-6 py-4 text-sm font-bold uppercase tracking-widest text-white flex justify-between items-center">
-        <span>Execution Pipeline: Exam Prediction</span>
-        <span className="text-[10px] bg-slate-700 px-2 py-1 rounded">Inference Mode</span>
-    </div>
-
-    <div className="p-6 md:p-10 space-y-0">
-
-        {/* STEP 1: PARAMETERS */}
-        <div className="flex flex-col md:flex-row gap-6 relative pb-10">
-        {/* The Vertical Line */}
-        <div className="absolute left-[23px] top-12 bottom-0 w-px bg-slate-200 hidden md:block" />
-
-        <div className="flex-none z-10">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 font-bold text-lg ring-4 ring-white">1</div>
-        </div>
-        <div className="flex-1 space-y-3">
-            <div>
-            <h4 className="font-bold text-foreground flex items-center gap-2 text-lg">
-                Model Parameters <span className="text-xs font-normal text-muted-foreground">(The "Brain")</span>
-            </h4>
-            <p className="text-sm text-muted-foreground">The weights represent how much the model "cares" about each feature.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="rounded-lg border border-amber-100 bg-amber-50/50 p-3 text-center">
-                <div className="text-[10px] font-bold text-amber-600 uppercase">Weight <LatexMath inline math='w_1' /></div>
-                <div className="font-mono text-lg font-bold">0.5</div>
-                <div className="text-[10px] text-amber-500 italic">Study Hours</div>
-            </div>
-            <div className="rounded-lg border border-amber-100 bg-amber-50/50 p-3 text-center">
-                <div className="text-[10px] font-bold text-amber-600 uppercase">Weight <LatexMath inline math='w_2' /></div>
-                <div className="font-mono text-lg font-bold">0.1</div>
-                <div className="text-[10px] text-amber-500 italic">Prev. Grades</div>
-            </div>
-            <div className="rounded-lg border border-amber-100 bg-amber-50/50 p-3 text-center">
-                <div className="text-[10px] font-bold text-amber-600 uppercase">Bias <LatexMath inline math='b' /></div>
-                <div className="font-mono text-lg font-bold">-5.0</div>
-                <div className="text-[10px] text-amber-500 italic">Baseline Shift</div>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        {/* STEP 2: INPUT DATA */}
-        <div className="flex flex-col md:flex-row gap-6 relative pb-10">
-        <div className="absolute left-[23px] top-0 bottom-0 w-px bg-slate-200 hidden md:block" />
-        <div className="flex-none z-10">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 text-purple-600 font-bold text-lg ring-4 ring-white">2</div>
-        </div>
-        <div className="flex-1 space-y-3">
-            <div>
-            <h4 className="font-bold text-foreground flex items-center gap-2 text-lg">
-                Input Features <span className="text-xs font-normal text-muted-foreground">(The "Evidence")</span>
-            </h4>
-            <p className="text-sm text-muted-foreground">The specific data from a student we want to predict for.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center justify-between rounded-lg border border-purple-100 bg-purple-50/50 p-4">
-                <span className="text-sm font-medium italic">Study Hours <LatexMath inline math='x_1' /></span>
-                <span className="font-mono font-bold text-purple-700 text-lg">10 hrs</span>
-            </div>
-            <div className="flex items-center justify-between rounded-lg border border-purple-100 bg-purple-50/50 p-4">
-                <span className="text-sm font-medium italic">Prev. Grade <LatexMath inline math='x_2' /></span>
-                <span className="font-mono font-bold text-purple-700 text-lg">20 pts</span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        {/* STEP 3: LINEAR SCORE */}
-        <div className="flex flex-col md:flex-row gap-6 relative pb-10">
-        <div className="absolute left-[23px] top-0 bottom-0 w-px bg-slate-200 hidden md:block" />
-        <div className="flex-none z-10">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold text-lg ring-4 ring-white">3</div>
-        </div>
-        <div className="flex-1 space-y-3">
-            <h4 className="font-bold text-foreground text-lg text-lg">Calculate Linear Score <LatexMath inline math='z' /></h4>
-            <div className="rounded-xl border-2 border-blue-500 bg-slate-900 p-5 text-white shadow-lg">
-            <div className="text-[10px] font-mono text-blue-400 uppercase mb-2 font-bold tracking-widest">Operation: wᵀx + b</div>
-            <div className="font-mono text-sm sm:text-base leading-relaxed">
-                z = (0.5 × 10) + (0.1 × 20) + (-5)
-            </div>
-            <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-black text-blue-400">z = 2.0</span>
-                <span className="text-[10px] text-slate-400 uppercase">Raw Score Output</span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        {/* STEP 4: PROBABILITY */}
-        <div className="flex flex-col md:flex-row gap-6 relative">
-        <div className="flex-none z-10">
-            {/* Added a subtle bounce for the final result */}
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-white font-bold text-lg ring-4 ring-white shadow-lg">4</div>
-        </div>
-        <div className="flex-1 space-y-3">
-            <h4 className="font-bold text-foreground text-lg">Final Prediction <LatexMath inline math='\hat{y}' /></h4>
-            <div className="rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 p-6 text-white shadow-xl">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="space-y-2">
-                <div className="text-[10px] font-bold uppercase opacity-80 font-mono tracking-widest">Sigmoid Mapping</div>
-                <div className="bg-white/10 px-3 py-2 rounded-md inline-block">
-                    <LatexMath math="\sigma(2) = \frac{1}{1 + e^{-2}} \approx 0.8808" />
-                </div>
-                </div>
-                <div className="text-right sm:border-l sm:border-white/20 sm:pl-6">
-                <div className="text-5xl font-black tracking-tighter leading-none">88.1%</div>
-                <div className="text-xs font-bold uppercase tracking-widest opacity-90 mt-1">Pass Probability</div>
-                </div>
-            </div>
-
-            {/* Visual Progress Bar */}
-            <div className="mt-6 space-y-1.5">
-                <div className="flex justify-between text-[10px] font-bold uppercase opacity-80">
-                    <span>Probability Scale</span>
-                    <span>Threshold: 50%</span>
-                </div>
-                <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden relative">
-                    {/* 50% Marker */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/40 z-10" />
-                    <div
-                    className="h-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.5)] transition-all duration-1000"
-                    style={{ width: '88.1%' }}
-                    />
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-
-    </div>
-    </div>
-
-    {/* 5. Sensitivity Analysis: What if? */}
-    <div className="mt-8 rounded-xl border bg-card overflow-hidden">
-      <div className="px-4 py-3 bg-slate-50 border-b text-xs font-bold uppercase text-slate-500 tracking-wider">
-        Sensitivity Check: Changing the Inputs
+    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
+      <div className="bg-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <span className="text-xs font-bold uppercase tracking-widest text-white">Inference Pipeline</span>
+        <span className="text-[9px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded font-mono border border-blue-500/30 w-fit">Status: Active</span>
       </div>
-      <div className="p-0 overflow-x-auto">
-        <table className="w-full text-left text-sm border-collapse">
-          <thead>
-            <tr className="bg-slate-50/50">
-              <th className="p-3 font-semibold border-b">Scenario</th>
-              <th className="p-3 font-semibold border-b">Hours <LatexMath inline math='x_1' /></th>
-              <th className="p-3 font-semibold border-b">Score <LatexMath inline math='z' /></th>
-              <th className="p-3 font-semibold border-b">Prob <LatexMath inline math='p' /></th>
-              <th className="p-3 font-semibold border-b">Result</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            <tr className="hover:bg-slate-50/30">
-              <td className="p-3 font-medium">Original</td>
-              <td className="p-3">10</td>
-              <td className="p-3 text-blue-600">+2.0</td>
-              <td className="p-3 font-bold">88%</td>
-              <td className="p-3"><span className="text-green-600 font-bold">PASS</span></td>
-            </tr>
-            <tr className="hover:bg-slate-50/30">
-              <td className="p-3 font-medium text-amber-600">Borderline</td>
-              <td className="p-3">6</td>
-              <td className="p-3">0.0</td>
-              <td className="p-3 font-bold">50%</td>
-              <td className="p-3"><span className="text-amber-500 font-bold">UNCERTAIN</span></td>
-            </tr>
-            <tr className="hover:bg-slate-50/30">
-              <td className="p-3 font-medium text-red-600">Poor Prep</td>
-              <td className="p-3">2</td>
-              <td className="p-3 text-red-600">-2.0</td>
-              <td className="p-3 font-bold">12%</td>
-              <td className="p-3"><span className="text-red-500 font-bold">FAIL</span></td>
-            </tr>
-          </tbody>
-        </table>
+
+      <div className="p-6 sm:p-10 space-y-12">
+        {/* Step 1 & 2: Input & Logic */}
+        <div className="grid gap-12 grid-cols-1 lg:grid-cols-2">
+          {/* Step 1 */}
+          <div className="flex gap-6">
+            <div className="flex-none h-12 w-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black shadow-lg shadow-amber-200">1</div>
+            <div className="space-y-4 flex-1">
+              <h4 className="font-bold text-lg">Brain: Parameters</h4>
+              <div className="grid grid-cols-3 gap-2">
+                {[['w₁','0.5'],['w₂','0.1'],['b','-5.0']].map(([label, val]) => (
+                  <div key={label} className="bg-amber-50 p-2 rounded-lg text-center border border-amber-100">
+                    <div className="text-[10px] text-amber-600 font-bold">$ {label} $</div>
+                    <div className="font-mono font-bold text-amber-900">{val}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2 */}
+          <div className="flex gap-6">
+            <div className="flex-none h-12 w-12 rounded-2xl bg-purple-500 text-white flex items-center justify-center font-black shadow-lg shadow-purple-200">2</div>
+            <div className="space-y-4 flex-1">
+              <h4 className="font-bold text-lg">Evidence: Inputs</h4>
+              <div className="grid grid-cols-2 gap-2">
+                {[['Hours (x₁)','10'],['Grade (x₂)','20']].map(([label, val]) => (
+                  <div key={label} className="bg-purple-50 p-2 rounded-lg text-center border border-purple-100">
+                    <div className="text-[10px] text-purple-600 font-bold">{label}</div>
+                    <div className="font-mono font-bold text-purple-900">{val}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Step 3 & 4: Output */}
+        <div className="grid gap-12 grid-cols-1 lg:grid-cols-2">
+          {/* Step 3 */}
+          <div className="flex gap-6">
+            <div className="flex-none h-12 w-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center font-black shadow-lg shadow-blue-200">3</div>
+            <div className="space-y-4 flex-1">
+              <h4 className="font-bold text-lg">Score Calculation ($z$)</h4>
+              <div className="bg-slate-900 rounded-2xl p-4 text-blue-400 font-mono text-sm border-2 border-blue-500/50">
+                <div className="opacity-50 text-[10px] mb-2 font-bold uppercase tracking-tighter">Inner Product + Bias</div>
+                <div>(0.5 × 10) + (0.1 × 20) - 5.0</div>
+                <div className="mt-2 text-2xl font-black">z = 2.0</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 4 */}
+          <div className="flex gap-6">
+            <div className="flex-none h-12 w-12 rounded-2xl bg-green-500 text-white flex items-center justify-center font-black shadow-lg shadow-green-200">4</div>
+            <div className="space-y-4 flex-1">
+              <h4 className="font-bold text-lg">Probability Result</h4>
+              <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-4 text-white shadow-xl">
+                <div className="flex justify-between items-end">
+                  <div className="bg-white/10 px-2 py-1 rounded text-xs">$\sigma(2.0)$</div>
+                  <div className="text-4xl font-black">88.1%</div>
+                </div>
+                <div className="mt-4 h-2 w-full bg-white/20 rounded-full overflow-hidden">
+                  <div className="h-full bg-white w-[88.1%]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 
-{/* 6. Summary Visualization */}
-
-  <div className="mt-12 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full -translate-y-16 translate-x-16" />
-     <h4 className="font-bold mb-6 flex items-center gap-2">
-       Quick Intuition Guide
-     </h4>
-     <div className="grid gap-6 sm:grid-cols-3">
-        {/* (Simplified Summary Boxes with better contrast) */}
-        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-           <div className="text-red-400 text-xl font-black mb-1"><LatexMath 
-           inline math='z < 0' /></div>
-           <p className="text-xs text-slate-400">Model is very confident in <strong>Class 0</strong></p>
-        </div>
-        <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
-           <div className="text-blue-400 text-xl font-black mb-1"><LatexMath inline math='z = 0' /></div>
-           <p className="text-xs text-slate-400">The <strong>Decision Boundary</strong> (50/50)</p>
-        </div>
-        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-           <div className="text-green-400 text-xl font-black mb-1"><LatexMath inline math='z > 0' /></div>
-           <p className="text-xs text-slate-400">Model is very confident in <strong>Class 1</strong></p>
-        </div>
-     </div>
-    
-     <div className="mt-4 text-center bold rounded-lg border ">
-        <SigmoidClampDemo />
-     </div>
+  {/* Sensitivity Table */}
+  <div className="mt-16 overflow-hidden rounded-3xl border bg-card shadow-sm">
+    <div className="px-6 py-4 bg-muted/30 border-b">
+      <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Scenario Sensitivity Check</h4>
+    </div>
+    <div className="overflow-x-auto">
+      <table className="w-full text-left text-xs sm:text-sm">
+        <thead className="bg-slate-50 border-b">
+          <tr>
+            <th className="p-4 font-bold">Scenario</th>
+            <th className="p-4 font-bold text-center">Hours ($x_1$)</th>
+            <th className="p-4 font-bold text-center">Score ($z$)</th>
+            <th className="p-4 font-bold text-center">Prob ($p$)</th>
+            <th className="p-4 font-bold text-right">Prediction</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100">
+          {[
+            ['Original', '10', '+2.0', '88%', 'PASS', 'text-green-600'],
+            ['Borderline', '6', '0.0', '50%', 'UNCERTAIN', 'text-amber-600'],
+            ['Poor Prep', '2', '-2.0', '12%', 'FAIL', 'text-red-600']
+          ].map(([name, hrs, z, p, res, color]) => (
+            <tr key={name} className="hover:bg-slate-50/50 transition-colors">
+              <td className="p-4 font-bold">{name}</td>
+              <td className="p-4 text-center font-mono">{hrs}</td>
+              <td className="p-4 text-center font-mono">{z}</td>
+              <td className="p-4 text-center font-bold">{p}</td>
+              <td className={`p-4 text-right font-black ${color}`}>{res}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </div>
 </Block>
+
 <Seperator />
 
+{/* Decision Boundary Section */}
+<Block bordered={false} divider label="Visual Insight" title="Understanding the Boundary">
+  <div className="space-y-8">
+    <div className="text-center max-w-2xl mx-auto space-y-4">
+      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+        The <strong>Decision Boundary</strong> is the geometric line where the model is 50/50. In this 2D feature space, it's a straight line where z=0.
+      </p>
+      <div className="flex flex-wrap justify-center gap-3">
+        <span className="inline-flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100 text-[10px] font-bold text-blue-700">BOUNDARY: z = 0</span>
+        <span className="inline-flex items-center gap-2 bg-green-50 px-3 py-1.5 rounded-full border border-green-100 text-[10px] font-bold text-green-700">PREDICT 1: z > 0</span>
+      </div>
+    </div>
 
+    <div className="rounded-3xl bg-white p-2 sm:p-6 shadow-2xl border border-slate-100">
+      <div className="h-[300px] sm:h-[400px] w-full">
+        <DecisionBoundaryPlot w1={0.5} w2={0.1} b={-5} />
+      </div>
+      <div className="mt-4 text-center">
+        <p className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Interactive Feature Space (Score vs Inputs)</p>
+      </div>
+    </div>
+  </div>
+</Block>
 
+<Seperator />
+
+<div className="mt-12 rounded-3xl bg-slate-900 p-6 sm:p-10 shadow-2xl relative overflow-hidden text-white">
+  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -translate-y-32 translate-x-32" />
+  
+  <h4 className="text-xl font-black mb-8 flex items-center gap-3 tracking-tight">
+    <span className="h-8 w-8 rounded-xl bg-blue-500 flex items-center justify-center text-sm italic">i</span>
+    Quick Intuition Guide
+  </h4>
+
+  <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+      <div className="text-red-400 text-3xl font-black mb-2 leading-none">z < 0 </div>
+      <p className="text-xs text-slate-400 font-medium uppercase tracking-tight">Very confident in <strong>Class 0</strong></p>
+    </div>
+    <div className="bg-blue-500/10 p-6 rounded-2xl border border-blue-500/20 shadow-inner">
+      <div className="text-blue-400 text-3xl font-black mb-2 leading-none">z = 0 </div>
+      <p className="text-xs text-slate-400 font-medium uppercase tracking-tight">The <strong>Decision Boundary</strong> (50/50)</p>
+    </div>
+    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+      <div className="text-green-400 text-3xl font-black mb-2 leading-none">z > 0 </div>
+      <p className="text-xs text-slate-400 font-medium uppercase tracking-tight">Very confident in <strong>Class 1</strong></p>
+    </div>
+  </div>
+
+  <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10">
+    <div className="mb-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Interactive Sandbox</div>
+    <div className="flex justify-center">
+      <SigmoidClampDemo />
+    </div>
+  </div>
+</div>
+
+<Seperator />
+
+<Block
+  bordered={false}
+  divider
+  label='Next up'
+  title='Defining the Loss Function'
+  description="Summary: We've squashed scores into probabilities. Now, how does the model learn if its probability is 'correct'?"
+>
+  <div className='grid gap-4 grid-cols-1 md:grid-cols-2 mt-6'>
+    <div className='rounded-2xl border p-5 bg-muted/20 hover:border-blue-200 transition-colors'>
+      <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>Gradient Descent</div>
+      <p className='text-sm text-muted-foreground leading-relaxed'>
+        The engine that updates weights to improve predictions by following the steepest slope.
+      </p>
+    </div>
+    <div className='rounded-2xl border p-5 bg-muted/20 hover:border-blue-200 transition-colors'>
+      <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>Logistic Loss</div>
+      <p className='text-sm text-muted-foreground leading-relaxed'>
+        The mathematical yardstick that measures the error between prediction and reality.
+      </p>
+    </div>
+  </div>
+</Block>

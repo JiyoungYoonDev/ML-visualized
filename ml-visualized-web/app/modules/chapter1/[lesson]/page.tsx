@@ -60,7 +60,7 @@ export async function generateStaticParams() {
   return lessons.map((lesson) => ({ lesson }));
 }
 
-export default async function LessonPage({
+export default async function Chapter1LessonPage({
   params,
 }: {
   params: Promise<{ lesson: string }>;
