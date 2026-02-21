@@ -1,10 +1,7 @@
 'use client';
 
 import { lessonPathFromMeta } from '@/lib/content/paths';
-import {
-  isLecturesSection,
-  toDisplaySectionLabel,
-} from '@/lib/content/labels';
+import { isLecturesSection, toDisplaySectionLabel } from '@/lib/content/labels';
 import { ChapterHeroSection } from '@/components/modules/chapter-home/ChapterHeroSection';
 import { ChapterRoadmapSection } from '@/components/modules/chapter-home/ChapterRoadmapSection';
 import { ExpertAdviceSection } from '@/components/modules/chapter-home/ExpertAdviceSection';

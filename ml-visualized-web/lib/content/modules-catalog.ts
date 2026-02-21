@@ -40,7 +40,9 @@ export async function getModuleChapterKeys(): Promise<string[]> {
     .filter((name) => !EXCLUDED_MODULE_CHAPTERS.has(name));
 }
 
-export async function getAllModuleLessonEntries(): Promise<ModuleLessonEntry[]> {
+export async function getAllModuleLessonEntries(): Promise<
+  ModuleLessonEntry[]
+> {
   const chapterKeys = await getModuleChapterKeys();
   const byChapter = await Promise.all(
     chapterKeys.map(async (chapterKey) => {
