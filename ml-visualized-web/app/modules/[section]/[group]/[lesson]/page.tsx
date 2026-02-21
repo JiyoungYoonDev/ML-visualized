@@ -15,6 +15,10 @@ import {
   lessonPathFromMeta,
   toPathSegment,
 } from '@/lib/content/paths';
+import {
+  findModuleLessonEntryByRoute,
+  getAllModuleLessonEntries,
+} from '@/lib/content/modules-catalog';
 import LessonFooter from '@/components/lesson/LessonFooter';
 
 import { LatexMath } from '@/components/latex-math';
@@ -129,8 +133,8 @@ async function getMistakeBoundedSlugs() {
 }
 
 export async function generateStaticParams() {
-  const lessons = await getAllLessons('chapter1');
-  const chapterParams = lessons.map((lesson) => ({
+  const moduleEntries = await getAllModuleLessonEntries();
+  const moduleParams = moduleEntries.map(({ lesson }) => ({
     section: toPathSegment(lesson.section),
     group: toPathSegment(lesson.group ?? lesson.section),
     lesson: lesson.slug,
@@ -138,13 +142,13 @@ export async function generateStaticParams() {
 
   const mistakeBoundedSlugs = await getMistakeBoundedSlugs();
   const mistakeParams = mistakeBoundedSlugs.map((slug) => ({
-    section: 'lectures',
+    section: 'machine-learning',
     group: 'mistake-bounded',
     lesson: slug,
   }));
 
   return [
-    ...chapterParams,
+    ...moduleParams,
     { section: 'linear-algebra', group: 'linear-algebra', lesson: 'eigen' },
     ...mistakeParams,
   ];
@@ -172,7 +176,7 @@ export default async function CanonicalLessonPage({
     redirect(`/modules/linear-algebra/${first.slug}`);
   }
 
-  if (section === 'lectures' && group === 'mistake-bounded') {
+  if (section === 'machine-learning' && group === 'mistake-bounded') {
     const [mistakeLesson, mistakeLessons] = await Promise.all([
       getMistakeBoundedLesson(lesson),
       getMistakeBoundedLessonsMeta(),
@@ -228,8 +232,8 @@ export default async function CanonicalLessonPage({
                 <Link
                   href={
                     prevLesson
-                      ? `/modules/lectures/mistake-bounded/${prevLesson.slug}`
-                      : '/modules/lectures/mistake-bounded/intro'
+                      ? `/modules/machine-learning/mistake-bounded/${prevLesson.slug}`
+                      : '/modules/machine-learning/mistake-bounded/intro'
                   }
                   className='rounded-lg border px-4 py-3 text-sm hover:bg-muted/50'
                 >
@@ -242,8 +246,8 @@ export default async function CanonicalLessonPage({
                 <Link
                   href={
                     nextLesson
-                      ? `/modules/lectures/mistake-bounded/${nextLesson.slug}`
-                      : '/modules/lectures/mistake-bounded/intro'
+                      ? `/modules/machine-learning/mistake-bounded/${nextLesson.slug}`
+                      : '/modules/machine-learning/mistake-bounded/intro'
                   }
                   className='rounded-lg border px-4 py-3 text-sm hover:bg-muted/50'
                 >
@@ -270,7 +274,7 @@ export default async function CanonicalLessonPage({
                   return (
                     <Link
                       key={item.slug}
-                      href={`/modules/lectures/mistake-bounded/${item.slug}`}
+                      href={`/modules/machine-learning/mistake-bounded/${item.slug}`}
                       className={[
                         'block rounded-lg border px-3 py-3 transition',
                         isActive
@@ -295,7 +299,15 @@ export default async function CanonicalLessonPage({
     );
   }
 
-  const lessons = await getAllLessons('chapter1');
+  const entry = await findModuleLessonEntryByRoute({
+    section,
+    group,
+    lesson,
+  });
+  if (!entry) notFound();
+
+  const chapterKey = entry.chapterKey;
+  const lessons = await getAllLessons(chapterKey);
   const target = lessons.find((item) => item.slug === lesson);
 
   if (!target) notFound();
@@ -305,9 +317,9 @@ export default async function CanonicalLessonPage({
 
   if (!sectionOk || !groupOk) notFound();
 
-  const { meta, content } = await getLessonBySlug('chapter1', lesson);
+  const { meta, content } = await getLessonBySlug(chapterKey, lesson);
 
-  if (await hasLessonIntroduction('chapter1', lesson)) {
+  if (await hasLessonIntroduction(chapterKey, lesson)) {
     redirect(featurePathFromMeta(meta, 'introduction'));
   }
 
@@ -376,7 +388,7 @@ export default async function CanonicalLessonPage({
       </div>
 
       <LessonFooter
-        chapter='chapter1'
+        chapter={chapterKey}
         slug={lesson}
         prev={
           prev

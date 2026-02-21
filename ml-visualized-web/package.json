@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "powershell -NoProfile -Command \"$project=(Get-Location).Path; Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'node.exe' -and $_.CommandLine -like ('*' + $project + '*next*dev*') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }; if (Test-Path '.next\\dev\\lock') { Remove-Item '.next\\dev\\lock' -Force -ErrorAction SilentlyContinue }; npm run dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

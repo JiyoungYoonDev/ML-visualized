@@ -5,6 +5,7 @@ import type {
   NavSection,
 } from '@/lib/content/types';
 import { lessonPathFromMeta, overviewPathFromMeta } from '@/lib/content/paths';
+import { isLecturesSection, toDisplaySectionLabel } from '@/lib/content/labels';
 
 function normalizeOrderKey(value: string) {
   return value
@@ -70,7 +71,9 @@ export function buildNavGroups({
 
     const subgroupNames = [...subMap.keys()].sort((a, b) => a.localeCompare(b));
 
-    const preferredSubgroupOrder = section === 'Lectures' ? ['Algorithms'] : [];
+    const preferredSubgroupOrder = isLecturesSection(section)
+      ? ['Algorithms']
+      : [];
     subgroupNames.sort((a, b) => {
       const ai = preferredSubgroupOrder.indexOf(a);
       const bi = preferredSubgroupOrder.indexOf(b);
@@ -148,6 +151,7 @@ export function buildNavGroupsSplit({
 
   const preferredSectionOrder = [
     'bootcamps',
+    'optimization',
     'linear-algebra',
     'lectures',
     'extras',
@@ -168,7 +172,9 @@ export function buildNavGroupsSplit({
     const subMap = sectionMap.get(section)!;
 
     const subgroupNames = [...subMap.keys()];
-    const preferredSubgroupOrder = section === 'Lectures' ? ['Algorithms'] : [];
+    const preferredSubgroupOrder = isLecturesSection(section)
+      ? ['Algorithms']
+      : [];
     subgroupNames.sort((a, b) => {
       const ai = preferredSubgroupOrder.indexOf(a);
       const bi = preferredSubgroupOrder.indexOf(b);
@@ -211,7 +217,7 @@ export function buildNavGroupsSplit({
     });
 
     nav.push({
-      group: section.toUpperCase(),
+      group: toDisplaySectionLabel(section).toUpperCase(),
       sections,
     });
   }

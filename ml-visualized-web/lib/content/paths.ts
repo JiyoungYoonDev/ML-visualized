@@ -1,12 +1,18 @@
 import type { LessonMeta } from '@/lib/content/types';
 
 export function toPathSegment(value: string) {
-  return value
+  const normalized = value
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
+
+  if (normalized === 'lectures') {
+    return 'machine-learning';
+  }
+
+  return normalized;
 }
 
 export function lessonPathFromMeta(

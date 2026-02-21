@@ -27,7 +27,7 @@ export default async function GroupOverviewPage({
 }) {
   const { section, group } = await params;
 
-  if (section === 'lectures' && group === 'mistake-bounded') {
+  if (section === 'machine-learning' && group === 'mistake-bounded') {
     return <MistakeBoundedHomeClient />;
   }
 

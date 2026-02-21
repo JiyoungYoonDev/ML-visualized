@@ -1,6 +1,10 @@
 'use client';
 
 import { lessonPathFromMeta } from '@/lib/content/paths';
+import {
+  isLecturesSection,
+  toDisplaySectionLabel,
+} from '@/lib/content/labels';
 import { ChapterHeroSection } from '@/components/modules/chapter-home/ChapterHeroSection';
 import { ChapterRoadmapSection } from '@/components/modules/chapter-home/ChapterRoadmapSection';
 import { ExpertAdviceSection } from '@/components/modules/chapter-home/ExpertAdviceSection';
@@ -19,7 +23,14 @@ export default function ChapterHomeClient({
   sections: SectionGroup[];
   first: LessonMeta | null;
 }) {
-  const lectures = sections.find((s) => s.section === 'Lectures')?.items ?? [];
+  const normalizedSections = sections.map((sectionGroup) => ({
+    ...sectionGroup,
+    section: toDisplaySectionLabel(sectionGroup.section),
+  }));
+
+  const lectures =
+    sections.find((sectionGroup) => isLecturesSection(sectionGroup.section))
+      ?.items ?? [];
   const roadmap: RoadmapItem[] = lectures.slice(0, 3).map((l, idx) => ({
     title: l.title,
     desc: l.summary ?? '',
@@ -38,7 +49,7 @@ export default function ChapterHomeClient({
       <ChapterRoadmapSection roadmap={roadmap} first={first} />
       <ExpertAdviceSection />
       <DeeperNotesSection />
-      <SectionLessonsGrid sections={sections} />
+      <SectionLessonsGrid sections={normalizedSections} />
     </main>
   );
 }

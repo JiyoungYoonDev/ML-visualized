@@ -19,19 +19,19 @@ const lessons = [
   {
     title: 'Intro: What is mistake-bounded learning?',
     desc: 'Online learning setup, notation (M vs m), and why mistake bounds matter.',
-    href: '/modules/lectures/mistake-bounded/intro',
+    href: '/modules/machine-learning/mistake-bounded/intro',
     tag: 'Start here',
   },
   {
     title: 'Weighted Majority',
     desc: 'Combine expert advice with weights. See how mistakes shrink total weight W.',
-    href: '/modules/lectures/mistake-bounded/weighted-majority',
+    href: '/modules/machine-learning/mistake-bounded/weighted-majority',
     tag: 'Core',
   },
   {
     title: 'Monotone Disjunction (Elimination)',
     desc: 'Simple mistake bound example: remove features on negative mistakes.',
-    href: '/modules/lectures/mistake-bounded/monotone-disjunction',
+    href: '/modules/machine-learning/mistake-bounded/monotone-disjunction',
     tag: 'Soon',
     disabled: true,
   },
@@ -105,7 +105,7 @@ export default function MistakeBoundedHomeClient() {
         </div>
 
         <div className='mt-5 flex flex-wrap gap-2'>
-          <Link href='/modules/lectures/mistake-bounded/intro'>
+          <Link href='/modules/machine-learning/mistake-bounded/intro'>
             <Button>Start here (Intro)</Button>
           </Link>
         </div>

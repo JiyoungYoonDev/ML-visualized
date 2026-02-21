@@ -1,4 +1,4 @@
-import { getAllLessons } from '@/lib/content';
+import { getAllModuleLessons } from '@/lib/content/modules-catalog';
 import type { LessonMeta } from '@/lib/content/types';
 
 export type ModuleHomeSection = {
@@ -11,7 +11,7 @@ export async function getModulesHomeData(): Promise<{
   sections: ModuleHomeSection[];
   first: LessonMeta | null;
 }> {
-  const lessons = await getAllLessons('chapter1');
+  const lessons = await getAllModuleLessons();
 
   const bySection = new Map<string, LessonMeta[]>();
   for (const lesson of lessons) {

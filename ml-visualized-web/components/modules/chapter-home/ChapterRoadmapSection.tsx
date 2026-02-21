@@ -58,7 +58,7 @@ export function ChapterRoadmapSection({
             <Button>Start here</Button>
           </Link>
         )}
-        <Link href='/modules/lectures/drills'>
+        <Link href='/modules/machine-learning/drills'>
           <Button variant='outline'>Open drills</Button>
         </Link>
       </div>

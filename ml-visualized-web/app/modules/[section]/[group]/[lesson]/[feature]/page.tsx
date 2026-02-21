@@ -10,6 +10,10 @@ import {
   hasLessonIntroduction,
 } from '@/lib/content';
 import { featurePathFromMeta, toPathSegment } from '@/lib/content/paths';
+import {
+  findModuleLessonEntryByRoute,
+  getAllModuleLessonEntries,
+} from '@/lib/content/modules-catalog';
 import LessonFooter from '@/components/lesson/LessonFooter';
 
 import { LatexMath } from '@/components/latex-math';
@@ -174,7 +178,6 @@ async function resolveLinearFeatureSlug(rawFeature: string) {
 }
 
 export async function generateStaticParams() {
-  const lessons = await getAllLessons('chapter1');
   const params: Array<{
     section: string;
     group: string;
@@ -182,12 +185,17 @@ export async function generateStaticParams() {
     feature: string;
   }> = [];
 
-  for (const lesson of lessons) {
+  const moduleEntries = await getAllModuleLessonEntries();
+  const nonLinearEntries = moduleEntries.filter(
+    (entry) => entry.chapterKey !== 'linear_algebra',
+  );
+
+  for (const { chapterKey, lesson } of nonLinearEntries) {
     const section = toPathSegment(lesson.section);
     const group = toPathSegment(lesson.group ?? lesson.section);
     if (!group) continue;
 
-    const features = await getLessonFeatures('chapter1', lesson.slug);
+    const features = await getLessonFeatures(chapterKey, lesson.slug);
     for (const feature of features) {
       params.push({
         section,
@@ -308,7 +316,15 @@ export default async function CanonicalFeaturePage({
     );
   }
 
-  const lessons = await getAllLessons('chapter1');
+  const entry = await findModuleLessonEntryByRoute({
+    section,
+    group,
+    lesson,
+  });
+  if (!entry) notFound();
+
+  const chapterKey = entry.chapterKey;
+  const lessons = await getAllLessons(chapterKey);
   const target = lessons.find((item) => item.slug === lesson);
 
   if (!target) notFound();
@@ -318,14 +334,14 @@ export default async function CanonicalFeaturePage({
 
   if (!sectionOk || !groupOk) notFound();
 
-  if (!(await hasLessonIntroduction('chapter1', lesson))) {
+  if (!(await hasLessonIntroduction(chapterKey, lesson))) {
     notFound();
   }
 
   const [lessonDoc, featureDoc, features] = await Promise.all([
-    getLessonBySlug('chapter1', lesson),
-    getLessonFeatureBySlug('chapter1', lesson, feature),
-    getLessonFeatures('chapter1', lesson),
+    getLessonBySlug(chapterKey, lesson),
+    getLessonFeatureBySlug(chapterKey, lesson, feature),
+    getLessonFeatures(chapterKey, lesson),
   ]);
 
   const activeFeature = features.find((item) => item.slug === feature);
@@ -464,7 +480,7 @@ export default async function CanonicalFeaturePage({
       </section>
 
       <LessonFooter
-        chapter='chapter1'
+        chapter={chapterKey}
         slug={lesson}
         prev={
           prevFeature
