@@ -1,9 +1,15 @@
-import Image from 'next/image';
+import ModulesShell from '@/components/modules/ModulesShell';
+import ChapterHomeClient from '@/components/modules/ChapterHomeClient';
+import { getModulesHomeData } from '@/lib/content/modules-home';
+import { buildModulesNav } from '@/lib/content/modules-nav';
 
-export default function Home() {
+export default async function Home() {
+  const { sections, first } = await getModulesHomeData();
+  const nav = await buildModulesNav();
+
   return (
-    <div className='flex min-h-screen items-center justify-center'>
-      <h1 className='text-blue-500'>hi</h1>
-    </div>
+    <ModulesShell nav={nav}>
+      <ChapterHomeClient sections={sections} first={first} />
+    </ModulesShell>
   );
 }

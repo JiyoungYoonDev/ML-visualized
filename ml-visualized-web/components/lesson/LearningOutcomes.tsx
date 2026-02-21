@@ -76,7 +76,9 @@ export function LearningOutcomes(props: LearningOutcomesProps) {
               key={`${item}-${index}`}
               className='rounded-lg border bg-card p-3 text-sm leading-6 text-muted-foreground'
             >
-              <span className='font-semibold text-foreground'>#{index + 1}</span>{' '}
+              <span className='font-semibold text-foreground'>
+                #{index + 1}
+              </span>{' '}
               {item}
             </li>
           ))}

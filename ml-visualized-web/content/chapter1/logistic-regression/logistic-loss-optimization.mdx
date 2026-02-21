@@ -1,7 +1,8 @@
 ---
-title: "Logistic Loss Optimization"
-summary: "Derive the gradient intuition for logistic loss and connect it to gradient descent updates."
+title: 'Logistic Loss Optimization'
+summary: 'Derive the gradient intuition for logistic loss and connect it to gradient descent updates.'
 ---
+
 <Block
   label="Context"
   title="Logistic Regression Loss Optimization"
@@ -96,7 +97,7 @@ summary: "Derive the gradient intuition for logistic loss and connect it to grad
             Why the Log Function?
           </h4>
           <p className="text-sm leading-relaxed">
-            Log transforms the loss into a manageable, <strong>convex</strong> form. It enforces a massive penalty for "confident mistakes." 
+            Log transforms the loss into a manageable, <strong>convex</strong> form. It enforces a massive penalty for "confident mistakes."
             If <LatexMath math="y=1" /> but <LatexMath math="P \to 0" />, the loss approaches infinity because:
           </p>
           <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
@@ -151,5 +152,6 @@ summary: "Derive the gradient intuition for logistic loss and connect it to grad
         </div>
       </div>
     </div>
+
   </div>
 </Block>

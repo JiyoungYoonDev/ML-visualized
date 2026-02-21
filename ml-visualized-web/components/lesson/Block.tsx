@@ -26,12 +26,12 @@ export function Block({
   const isBordered = bordered === true || bordered === 'true';
   return (
     <section
-        className={cn(
+      className={cn(
         'not-prose my-8',
-        isBordered 
-          ? 'rounded-xl border bg-card p-5 md:p-6 shadow-sm' 
+        isBordered
+          ? 'rounded-xl border bg-card p-5 md:p-6 shadow-sm'
           : 'px-0 py-2',
-        className
+        className,
       )}
     >
       {(label || title || description) && (

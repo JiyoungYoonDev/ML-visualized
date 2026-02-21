@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import type { ReactNode } from 'react';
 import {
@@ -7,9 +7,9 @@ import {
   getLessonBySlug,
   getLessonFeatureBySlug,
   getLessonFeatures,
-  getSlugs,
   hasLessonIntroduction,
 } from '@/lib/content';
+import { featurePathFromMeta, toPathSegment } from '@/lib/content/paths';
 import LessonFooter from '@/components/lesson/LessonFooter';
 
 import { LatexMath } from '@/components/latex-math';
@@ -51,8 +51,9 @@ import {
 } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SigmoidClampDemo } from '@/components/lesson/simulators/SigmoidClampDemo';
-import { DecisionBoundaryPlot} from '@/components/lesson/simulators/DecisionBoundaryPlot';
+import { DecisionBoundaryPlot } from '@/components/lesson/simulators/DecisionBoundaryPlot';
 import GraphPlot from '@/components/lesson/simulators/GraphPlot';
+
 type TocItem = {
   id: string;
   text: string;
@@ -147,43 +148,184 @@ function plainTextFromNode(node: ReactNode): string {
   return '';
 }
 
-const Paragraph = ({ children, ...props }: { children?: ReactNode } & Record<string, unknown>) => {
+const Paragraph = ({
+  children,
+  ...props
+}: { children?: ReactNode } & Record<string, unknown>) => {
   return <span {...props}>{children}</span>;
 };
 
+function normalizeLinearFeatureSlug(raw: string) {
+  return raw.toLowerCase().trim();
+}
+
+async function resolveLinearFeatureSlug(rawFeature: string) {
+  const lessons = await getAllLessons('linear_algebra');
+  const normalized = normalizeLinearFeatureSlug(rawFeature);
+
+  const candidates = [
+    normalized,
+    normalized.replace(/-/g, '_'),
+    normalized.replace(/_/g, '-'),
+  ];
+
+  const match = lessons.find((item) => candidates.includes(item.slug));
+  return { lessons, match };
+}
+
 export async function generateStaticParams() {
-  const lessonSlugs = await getSlugs('chapter1');
+  const lessons = await getAllLessons('chapter1');
+  const params: Array<{
+    section: string;
+    group: string;
+    lesson: string;
+    feature: string;
+  }> = [];
 
-  const params: Array<{ lesson: string; feature: string }> = [];
+  for (const lesson of lessons) {
+    const section = toPathSegment(lesson.section);
+    const group = toPathSegment(lesson.group ?? lesson.section);
+    if (!group) continue;
 
-  for (const lesson of lessonSlugs) {
-    if (!(await hasLessonIntroduction('chapter1', lesson))) continue;
-
-    const features = await getLessonFeatures('chapter1', lesson);
+    const features = await getLessonFeatures('chapter1', lesson.slug);
     for (const feature of features) {
-      params.push({ lesson, feature: feature.slug });
+      params.push({
+        section,
+        group,
+        lesson: lesson.slug,
+        feature: feature.slug,
+      });
     }
+  }
+
+  const linearLessons = await getAllLessons('linear_algebra');
+  for (const linear of linearLessons) {
+    params.push({
+      section: 'linear-algebra',
+      group: 'linear-algebra',
+      lesson: 'eigen',
+      feature: linear.slug,
+    });
   }
 
   return params;
 }
 
-export default async function LessonFeaturePage({
+export default async function CanonicalFeaturePage({
   params,
 }: {
-  params: Promise<{ lesson: string; feature: string }>;
+  params: Promise<{
+    section: string;
+    group: string;
+    lesson: string;
+    feature: string;
+  }>;
 }) {
-  const { lesson, feature } = await params;
+  const { section, group, lesson, feature } = await params;
+
+  if (
+    section === 'linear-algebra' &&
+    group === 'linear-algebra' &&
+    lesson === 'eigen'
+  ) {
+    if (feature === 'introduction') {
+      redirect('/modules/linear-algebra/overview');
+    }
+
+    const { lessons: linearLessons, match } =
+      await resolveLinearFeatureSlug(feature);
+    if (!match) notFound();
+
+    const lessonDoc = await getLessonBySlug('linear_algebra', match.slug);
+    const sorted = linearLessons
+      .slice()
+      .sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999));
+
+    const currentIndex = sorted.findIndex((item) => item.slug === match.slug);
+    const prev = currentIndex > 0 ? sorted[currentIndex - 1] : undefined;
+    const next =
+      currentIndex >= 0 && currentIndex < sorted.length - 1
+        ? sorted[currentIndex + 1]
+        : undefined;
+
+    return (
+      <main className='mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10'>
+        <section className='rounded-2xl border bg-card p-6 md:p-10'>
+          <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
+            {String(lessonDoc.meta.chapter ?? 'Linear Algebra')} ·{' '}
+            {String(lessonDoc.meta.section ?? 'Lesson')}
+          </p>
+
+          <h1 className='mt-2 text-3xl font-bold tracking-tight md:text-4xl'>
+            {String(lessonDoc.meta.title ?? match.slug)}
+          </h1>
+
+          {lessonDoc.meta.summary && (
+            <p className='mt-3 text-sm leading-7 text-muted-foreground'>
+              {String(lessonDoc.meta.summary)}
+            </p>
+          )}
+        </section>
+
+        <div className='mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]'>
+          <article className='rounded-2xl border bg-card p-5 md:p-8'>
+            <div className='prose prose-zinc dark:prose-invert max-w-none'>
+              <MDXRemote
+                source={lessonDoc.content}
+                components={{
+                  LatexMath,
+                  QuizBlock,
+                  Simulator,
+                  Block,
+                  LearningOutcomes,
+                }}
+              />
+            </div>
+          </article>
+        </div>
+
+        <LessonFooter
+          chapter='linear-algebra'
+          slug={match.slug}
+          prev={
+            prev
+              ? {
+                  title: prev.title,
+                  href: `/modules/linear-algebra/${prev.slug}`,
+                }
+              : undefined
+          }
+          next={
+            next
+              ? {
+                  title: next.title,
+                  href: `/modules/linear-algebra/${next.slug}`,
+                }
+              : undefined
+          }
+        />
+      </main>
+    );
+  }
+
+  const lessons = await getAllLessons('chapter1');
+  const target = lessons.find((item) => item.slug === lesson);
+
+  if (!target) notFound();
+
+  const sectionOk = toPathSegment(target.section) === section;
+  const groupOk = toPathSegment(target.group ?? target.section) === group;
+
+  if (!sectionOk || !groupOk) notFound();
 
   if (!(await hasLessonIntroduction('chapter1', lesson))) {
     notFound();
   }
 
-  const [lessonDoc, featureDoc, features, all] = await Promise.all([
+  const [lessonDoc, featureDoc, features] = await Promise.all([
     getLessonBySlug('chapter1', lesson),
     getLessonFeatureBySlug('chapter1', lesson, feature),
     getLessonFeatures('chapter1', lesson),
-    getAllLessons('chapter1'),
   ]);
 
   const activeFeature = features.find((item) => item.slug === feature);
@@ -191,9 +333,6 @@ export default async function LessonFeaturePage({
     notFound();
   }
 
-  const idx = all.findIndex((x) => x.slug === lesson);
-  const prev = idx > 0 ? all[idx - 1] : undefined;
-  const next = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : undefined;
   const featureIdx = features.findIndex((item) => item.slug === feature);
   const prevFeature = featureIdx > 0 ? features[featureIdx - 1] : undefined;
   const nextFeature =
@@ -269,7 +408,7 @@ export default async function LessonFeaturePage({
           <TabsList className='inline-flex h-auto w-fit flex-wrap justify-start'>
             {features.map((item) => (
               <TabsTrigger asChild key={item.slug} value={item.slug}>
-                <Link href={`/modules/chapter1/${lesson}/${item.slug}`}>
+                <Link href={featurePathFromMeta(lessonDoc.meta, item.slug)}>
                   {item.label}
                 </Link>
               </TabsTrigger>
@@ -331,7 +470,7 @@ export default async function LessonFeaturePage({
           prevFeature
             ? {
                 title: prevFeature.label,
-                href: `/modules/chapter1/${lesson}/${prevFeature.slug}`,
+                href: featurePathFromMeta(lessonDoc.meta, prevFeature.slug),
               }
             : undefined
         }
@@ -339,7 +478,7 @@ export default async function LessonFeaturePage({
           nextFeature
             ? {
                 title: nextFeature.label,
-                href: `/modules/chapter1/${lesson}/${nextFeature.slug}`,
+                href: featurePathFromMeta(lessonDoc.meta, nextFeature.slug),
               }
             : undefined
         }

@@ -16,12 +16,16 @@ export function LatexMath({ math, block = false, className }: MathProps) {
 
   if (block)
     return (
-      <div className={cn('text-foreground [&_.katex]:text-foreground', className)}>
+      <div
+        className={cn('text-foreground [&_.katex]:text-foreground', className)}
+      >
         <BlockMath math={safeMath} />
       </div>
     );
   return (
-    <span className={cn('text-foreground [&_.katex]:text-foreground', className)}>
+    <span
+      className={cn('text-foreground [&_.katex]:text-foreground', className)}
+    >
       <InlineMath math={safeMath} />
     </span>
   );

@@ -42,8 +42,7 @@ export default function GraphPlot({
   mobileBreakpointPx = 640,
   loadingText = 'Loading Graph...',
   fetchErrorMessage = 'Graph JSON 로드 실패: fallback 데이터로 표시합니다.',
-  hoverTemplate =
-    '<b>Margin (z)</b>: %{x:.2f}<br><b>Loss</b>: %{y:.4f}<extra>%{fullData.name}</extra>',
+  hoverTemplate = '<b>Margin (z)</b>: %{x:.2f}<br><b>Loss</b>: %{y:.4f}<extra>%{fullData.name}</extra>',
   hoverInfo = 'x+y+name',
 }: GraphPlotProps) {
   const [data, setData] = useState<GraphData | null>(null);
@@ -51,7 +50,9 @@ export default function GraphPlot({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpointPx}px)`);
+    const mediaQuery = window.matchMedia(
+      `(max-width: ${mobileBreakpointPx}px)`,
+    );
     const updateViewport = (event: MediaQueryList | MediaQueryListEvent) => {
       setIsMobile(event.matches);
     };

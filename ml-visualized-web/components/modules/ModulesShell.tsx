@@ -138,10 +138,14 @@ function SidebarContent({
         <div className='px-4 py-4'>
           <div className='flex items-start justify-between gap-2'>
             <div className={collapsed ? 'hidden' : ''}>
-              <div className='text-lg font-semibold'>ML Visualized</div>
-              <div className='text-sm text-muted-foreground'>
-                Learn by moving graphs
-              </div>
+              <Link href='/' onClick={closeOnNavigate} className='block'>
+                <div className='text-lg font-semibold hover:underline'>
+                  ML Visualized
+                </div>
+                <div className='text-sm text-muted-foreground'>
+                  Learn by moving graphs
+                </div>
+              </Link>
             </div>
 
             {onToggle && (
@@ -238,7 +242,7 @@ function SidebarContent({
                                   );
 
                                   const content = (
-                                    <div className='flex items-center gap-2 min-w-0'>
+                                    <div className='flex flex-1 items-center gap-2 min-w-0'>
                                       {leftBar}
                                       <Icon className='h-4 w-4 text-muted-foreground group-hover:text-foreground' />
                                       {!collapsed ? (
@@ -266,7 +270,7 @@ function SidebarContent({
                                       >
                                         {content}
                                         {!collapsed && (
-                                          <div className='flex items-center gap-1.5'>
+                                          <div className='flex shrink-0 items-center gap-1.5'>
                                             {hasQuiz && (
                                               <span className='rounded-full border px-2 py-0.5 text-[10px] text-muted-foreground'>
                                                 {qp.correct}/{qp.total}
@@ -294,7 +298,7 @@ function SidebarContent({
                                     >
                                       {content}
                                       {!collapsed && (
-                                        <div className='flex items-center gap-1.5'>
+                                        <div className='flex shrink-0 items-center gap-1.5'>
                                           {hasQuiz && (
                                             <span className='rounded-full border px-2 py-0.5 text-[10px] text-muted-foreground'>
                                               {qp.correct}/{qp.total}

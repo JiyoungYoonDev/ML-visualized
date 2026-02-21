@@ -13,28 +13,29 @@ icon: 'LineChart'
 
 <Prerequisites>
   <PrerequisiteLink
-    href='/modules/chapter1/logistic-regression/losses'
+    href='/modules/lectures/algorithms/logistic-regression/losses'
     title='Linear Classification'
     description='Score, decision boundary, and why logistic needs probability outputs'
   />
 
   <PrerequisiteLink
-    href='/modules/chapter1/logistic-regression/logistic-loss-optimization'
+    href='/modules/lectures/algorithms/logistic-regression/logistic-loss-optimization'
     title='Basic Calculus (Gradients)'
     description='Gradient intuition and gradient descent update flow'
   />
 </Prerequisites>
 
 <LearningOutcomes>
-  - Explain what logistic regression is and its use case.
-  - Describe the three main steps in the logistic regression pipeline.
-  - Understand why we need logistic regression instead of just a linear classifier.
-  - Read and interpret the mathematical notation used in logistic regression.
-  - Explain what a margin is in plain English and how it relates to the model's confidence.
-  - Understand the concept of logistic loss and how it penalizes wrong predictions.
-  - Describe how gradient descent updates the weights to minimize logistic loss.
-  - Compute logistic / hinge / exponential loss on small examples and explain the differences.
-  - Understand why these losses penalize "confident mistakes" more than "less confident mistakes".
+  - Explain what logistic regression is and its use case. - Describe the three
+  main steps in the logistic regression pipeline. - Understand why we need
+  logistic regression instead of just a linear classifier. - Read and interpret
+  the mathematical notation used in logistic regression. - Explain what a margin
+  is in plain English and how it relates to the model's confidence. - Understand
+  the concept of logistic loss and how it penalizes wrong predictions. -
+  Describe how gradient descent updates the weights to minimize logistic loss. -
+  Compute logistic / hinge / exponential loss on small examples and explain the
+  differences. - Understand why these losses penalize "confident mistakes" more
+  than "less confident mistakes".
 </LearningOutcomes>
 
 <Seperator />
@@ -54,22 +55,27 @@ icon: 'LineChart'
     </div>
   </TakeawayItem>
 
-  <TakeawayItem value='why-logistic' title='Why Logistic?'>
-    <div className="space-y-3 text-sm sm:text-base">
-      <p>
-        The main reason is that it outputs probabilities between 0 and 1. Linear regression can output any real number (e.g., -0.5 or 1.7), which is meaningless for "likelihood."
-      </p>
-      <p className='mt-2 italic text-muted-foreground'>
-        Valid probabilities must lie in [0,1]. Logistic regression ensures this "squashing" effect.
-      </p>
-    </div>
-  </TakeawayItem>
-
-  <TakeawayItem value='math-reading' title='Math Reading'>
-    <p className="text-sm sm:text-base">
-      Learn to read symbols like <LatexMath math='\sigma' />, <LatexMath math='z' />, and <LatexMath math='w' /> to understand how scores become probabilities.
+<TakeawayItem value='why-logistic' title='Why Logistic?'>
+  <div className='space-y-3 text-sm sm:text-base'>
+    <p>
+      The main reason is that it outputs probabilities between 0 and 1. Linear
+      regression can output any real number (e.g., -0.5 or 1.7), which is
+      meaningless for "likelihood."
     </p>
-  </TakeawayItem>
+    <p className='mt-2 italic text-muted-foreground'>
+      Valid probabilities must lie in [0,1]. Logistic regression ensures this
+      "squashing" effect.
+    </p>
+  </div>
+</TakeawayItem>
+
+<TakeawayItem value='math-reading' title='Math Reading'>
+  <p className='text-sm sm:text-base'>
+    Learn to read symbols like <LatexMath math='\sigma' />,{' '}
+    <LatexMath math='z' />, and <LatexMath math='w' /> to understand how scores
+    become probabilities.
+  </p>
+</TakeawayItem>
 
   <TakeawayItem value='optimization' title='Optimization'>
     <p className="text-sm sm:text-base">
@@ -84,9 +90,13 @@ icon: 'LineChart'
   title='What is logistic regression?'
   description='A classification model that turns a linear score into a probability using a sigmoid function.'
 >
-  <WhatIsLectureCard title='Goal'>Binary classification: Predict probability of Class 1 vs Class 0.</WhatIsLectureCard>
+  <WhatIsLectureCard title='Goal'>
+    Binary classification: Predict probability of Class 1 vs Class 0.
+  </WhatIsLectureCard>
   <WhatIsLectureCard title='Output'>Probability (0 to 1)</WhatIsLectureCard>
-  <WhatIsLectureCard title='Training'>Minimize logistic loss via Gradient Descent</WhatIsLectureCard>
+  <WhatIsLectureCard title='Training'>
+    Minimize logistic loss via Gradient Descent
+  </WhatIsLectureCard>
 </WhatIsLectureCards>
 
 <Seperator />
@@ -100,7 +110,8 @@ icon: 'LineChart'
     reading='Read: "x is a d-dimensional real-valued feature vector."'
   />
 
-  {/* Weight w_j */}
+{/* Weight w_j */}
+
   <NotationGuideItem 
     value="wj" 
     title="Weight for feature j"
@@ -136,21 +147,28 @@ icon: 'LineChart'
         </ul>
       </div>
     </div>
+
   </NotationGuideItem>
 
-  {/* Linear Score z */}
-  <NotationGuideItem
-    value='z'
-    title='Linear score: z'
-    formula='z = w^T x + b'
-    reading='Read: "z equals dot(w, x) plus bias b."'
-  >
-    <div className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-      <span className="font-semibold text-red-600">Weighted sum of features:</span> <LatexMath math='w^T x' /> represents the features combined. The bias <LatexMath math='b' /> shifts the boundary from the origin.
-    </div>
-  </NotationGuideItem>
+{/* Linear Score z */}
 
-  {/* Sigmoid Function */}
+<NotationGuideItem
+  value='z'
+  title='Linear score: z'
+  formula='z = w^T x + b'
+  reading='Read: "z equals dot(w, x) plus bias b."'
+>
+  <div className='mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed'>
+    <span className='font-semibold text-red-600'>
+      Weighted sum of features:
+    </span>{' '}
+    <LatexMath math='w^T x' /> represents the features combined. The bias{' '}
+    <LatexMath math='b' /> shifts the boundary from the origin.
+  </div>
+</NotationGuideItem>
+
+{/* Sigmoid Function */}
+
   <NotationGuideItem
     value='sigma'
     title='Sigmoid Function: σ(z)'
@@ -181,9 +199,11 @@ icon: 'LineChart'
         </ul>
       </div>
     </div>
+
   </NotationGuideItem>
 
-  {/* Prediction y-hat */}
+{/* Prediction y-hat */}
+
   <NotationGuideItem
     value='predict'
     title='Prediction: ŷ (y-hat)'
@@ -224,6 +244,7 @@ icon: 'LineChart'
         </div>
       </div>
     </div>
+
   </NotationGuideItem>
 </NotationGuide>
 
@@ -235,11 +256,19 @@ icon: 'LineChart'
   label='Big picture'
   title='The Whole Process in 3 Steps'
 >
-  <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+  <div className='overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0'>
     <PipelineSteps>
       <PipelineStep title='Score' text='Calculating z' math='z = w^T x + b' />
-      <PipelineStep title='Probability' text='Applying Sigmoid' math='p = \sigma(z)' />
-      <PipelineStep title='Predict' text='Final Decision' math='\hat{y} = \mathbb{1}[p \ge 0.5]' />
+      <PipelineStep
+        title='Probability'
+        text='Applying Sigmoid'
+        math='p = \sigma(z)'
+      />
+      <PipelineStep
+        title='Predict'
+        text='Final Decision'
+        math='\hat{y} = \mathbb{1}[p \ge 0.5]'
+      />
     </PipelineSteps>
   </div>
 </Block>
@@ -282,6 +311,7 @@ icon: 'LineChart'
         </p>
       </div>
     </div>
+
   </div>
 </Block>
 
@@ -317,7 +347,8 @@ icon: 'LineChart'
     </div>
   </div>
 
-  {/* Execution Pipeline */}
+{/* Execution Pipeline */}
+
   <div className="mt-16">
     <div className="border-l-4 border-blue-500 pl-4 mb-10">
       <h3 className="text-xl font-black uppercase tracking-tight">Pipeline Walkthrough: Student 001</h3>
@@ -400,9 +431,11 @@ icon: 'LineChart'
         </div>
       </div>
     </div>
+
   </div>
 
-  {/* Sensitivity Table */}
+{/* Sensitivity Table */}
+
   <div className="mt-16 overflow-hidden rounded-3xl border bg-card shadow-sm">
     <div className="px-6 py-4 bg-muted/30 border-b">
       <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Scenario Sensitivity Check</h4>
@@ -441,6 +474,7 @@ icon: 'LineChart'
 <Seperator />
 
 {/* Decision Boundary Section */}
+
 <Block bordered={false} divider label="Visual Insight" title="Understanding the Boundary">
   <div className="space-y-8">
     <div className="text-center max-w-2xl mx-auto space-y-4">
@@ -461,6 +495,7 @@ icon: 'LineChart'
         <p className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Interactive Feature Space (Score vs Inputs)</p>
       </div>
     </div>
+
   </div>
 </Block>
 
@@ -508,15 +543,21 @@ icon: 'LineChart'
 >
   <div className='grid gap-4 grid-cols-1 md:grid-cols-2 mt-6'>
     <div className='rounded-2xl border p-5 bg-muted/20 hover:border-blue-200 transition-colors'>
-      <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>Gradient Descent</div>
+      <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>
+        Gradient Descent
+      </div>
       <p className='text-sm text-muted-foreground leading-relaxed'>
-        The engine that updates weights to improve predictions by following the steepest slope.
+        The engine that updates weights to improve predictions by following the
+        steepest slope.
       </p>
     </div>
     <div className='rounded-2xl border p-5 bg-muted/20 hover:border-blue-200 transition-colors'>
-      <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>Logistic Loss</div>
+      <div className='text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3'>
+        Logistic Loss
+      </div>
       <p className='text-sm text-muted-foreground leading-relaxed'>
-        The mathematical yardstick that measures the error between prediction and reality.
+        The mathematical yardstick that measures the error between prediction
+        and reality.
       </p>
     </div>
   </div>
