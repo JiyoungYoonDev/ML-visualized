@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "dev:clean": "powershell -NoProfile -Command \"$project=(Get-Location).Path; Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'node.exe' -and $_.CommandLine -like ('*' + $project + '*next*dev*') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }; if (Test-Path '.next\\dev\\lock') { Remove-Item '.next\\dev\\lock' -Force -ErrorAction SilentlyContinue }; npm run dev\"",
+    "dev": "npm run dev:clean",
+    "dev:next": "next dev",
+    "dev:clean": "powershell -NoProfile -Command \"$project=(Get-Location).Path; Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'node.exe' -and $_.CommandLine -like ('*' + $project + '*next*dev*') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }; if (Test-Path '.next\\dev\\lock') { Remove-Item '.next\\dev\\lock' -Force -ErrorAction SilentlyContinue }; npm run dev:next\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -19,6 +20,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.34.3",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.28",
     "lucide-react": "^0.564.0",

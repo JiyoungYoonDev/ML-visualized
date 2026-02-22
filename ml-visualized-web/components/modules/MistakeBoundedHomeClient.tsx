@@ -14,6 +14,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { PageContainer } from '@/components/modules/common/PageContainer';
+import { SectionBox } from '@/components/modules/common/SectionBox';
 
 const lessons = [
   {
@@ -41,8 +43,8 @@ export default function MistakeBoundedHomeClient() {
   const [showTarget, setShowTarget] = useState(false);
 
   return (
-    <main className='mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10 space-y-6'>
-      <section className='rounded-2xl border bg-card p-6 md:p-8'>
+    <PageContainer>
+      <SectionBox>
         <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
           Chapter 1 · On-line Learning
         </p>
@@ -69,9 +71,9 @@ export default function MistakeBoundedHomeClient() {
             <p className='mt-1 text-sm font-semibold'>Adversarial sequence</p>
           </div>
         </div>
-      </section>
+      </SectionBox>
 
-      <section className='rounded-2xl border bg-card p-6 md:p-8'>
+      <SectionBox>
         <h2 className='text-xl font-semibold'>Roadmap</h2>
         <p className='mt-2 text-sm text-muted-foreground'>
           Start with Intro, then move to Weighted Majority.
@@ -109,9 +111,9 @@ export default function MistakeBoundedHomeClient() {
             <Button>Start here (Intro)</Button>
           </Link>
         </div>
-      </section>
+      </SectionBox>
 
-      <section className='rounded-2xl border bg-card p-6 md:p-8'>
+      <SectionBox>
         <h2 className='text-xl font-semibold'>Learning Objectives</h2>
         <ul className='mt-4 space-y-2 text-sm leading-6 text-muted-foreground'>
           <li>Understand what a mistake bound means in on-line learning.</li>
@@ -120,9 +122,9 @@ export default function MistakeBoundedHomeClient() {
           </li>
           <li>Build intuition using expert advice + weight updates.</li>
         </ul>
-      </section>
+      </SectionBox>
 
-      <section className='rounded-2xl border bg-card p-6 md:p-8'>
+      <SectionBox>
         <h2 className='text-xl font-semibold'>Predicting from Expert Advice</h2>
         <p className='mt-3 text-sm leading-7 text-muted-foreground'>
           In each round t, experts provide predictions, the learner predicts,
@@ -161,9 +163,9 @@ export default function MistakeBoundedHomeClient() {
             </div>
           </TabsContent>
         </Tabs>
-      </section>
+      </SectionBox>
 
-      <section className='rounded-2xl border bg-card p-6 md:p-8'>
+      <SectionBox>
         <div className='flex items-center justify-between gap-3'>
           <h2 className='text-xl font-semibold'>Deeper Notes</h2>
           <div className='flex items-center gap-3'>
@@ -219,7 +221,7 @@ export default function MistakeBoundedHomeClient() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </section>
-    </main>
+      </SectionBox>
+    </PageContainer>
   );
 }

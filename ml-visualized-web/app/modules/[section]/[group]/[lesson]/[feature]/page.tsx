@@ -14,6 +14,7 @@ import {
   findModuleLessonEntryByRoute,
   getAllModuleLessonEntries,
 } from '@/lib/content/modules-catalog';
+import { toGroupLabel } from '@/lib/content/labels';
 import LessonFooter from '@/components/lesson/LessonFooter';
 
 import { LatexMath } from '@/components/latex-math';
@@ -255,13 +256,13 @@ export default async function CanonicalFeaturePage({
       currentIndex >= 0 && currentIndex < sorted.length - 1
         ? sorted[currentIndex + 1]
         : undefined;
+    const pathLabel = toGroupLabel(group);
 
     return (
       <main className='mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10'>
         <section className='rounded-2xl border bg-card p-6 md:p-10'>
           <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-            {String(lessonDoc.meta.chapter ?? 'Linear Algebra')} ·{' '}
-            {String(lessonDoc.meta.section ?? 'Lesson')}
+            {pathLabel} · {String(lessonDoc.meta.title ?? match.slug)}
           </p>
 
           <h1 className='mt-2 text-3xl font-bold tracking-tight md:text-4xl'>
@@ -293,7 +294,7 @@ export default async function CanonicalFeaturePage({
         </div>
 
         <LessonFooter
-          chapter='linear-algebra'
+          chapter={pathLabel}
           slug={match.slug}
           prev={
             prev
@@ -355,6 +356,7 @@ export default async function CanonicalFeaturePage({
     featureIdx >= 0 && featureIdx < features.length - 1
       ? features[featureIdx + 1]
       : undefined;
+  const pathLabel = toGroupLabel(target.group ?? target.section);
   const tocItems = extractTocItems(featureDoc.content);
 
   const headingIdState = new Map<string, number>();
@@ -404,8 +406,7 @@ export default async function CanonicalFeaturePage({
     <main className='mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10'>
       <section className='rounded-2xl border bg-card p-6 md:p-10'>
         <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-          {String(lessonDoc.meta.chapter ?? 'Chapter')} ·{' '}
-          {String(lessonDoc.meta.section ?? 'Lesson')}
+          {pathLabel} · {String(lessonDoc.meta.title ?? lesson)}
         </p>
 
         <h1 className='mt-2 text-3xl font-bold tracking-tight md:text-4xl'>
@@ -480,7 +481,7 @@ export default async function CanonicalFeaturePage({
       </section>
 
       <LessonFooter
-        chapter={chapterKey}
+        chapter={pathLabel}
         slug={lesson}
         prev={
           prevFeature

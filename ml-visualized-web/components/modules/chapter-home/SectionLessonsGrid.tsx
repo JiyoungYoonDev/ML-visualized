@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import { SectionBox } from '@/components/modules/common/SectionBox';
 import { lessonPathFromMeta } from '@/lib/content/paths';
 import type { SectionGroup } from './types';
 
@@ -7,10 +8,7 @@ export function SectionLessonsGrid({ sections }: { sections: SectionGroup[] }) {
   return (
     <>
       {sections.map(({ section, items }) => (
-        <section
-          key={section}
-          className='rounded-2xl border bg-card p-6 md:p-8'
-        >
+        <SectionBox key={section}>
           <h2 className='text-xl font-semibold'>{section}</h2>
           <div className='mt-4 grid gap-3 sm:grid-cols-2'>
             {section !== 'Bootcamps' && items[0] && (
@@ -57,7 +55,7 @@ export function SectionLessonsGrid({ sections }: { sections: SectionGroup[] }) {
               </Link>
             ))}
           </div>
-        </section>
+        </SectionBox>
       ))}
     </>
   );

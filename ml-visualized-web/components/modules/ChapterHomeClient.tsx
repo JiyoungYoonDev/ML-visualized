@@ -7,6 +7,7 @@ import { ChapterRoadmapSection } from '@/components/modules/chapter-home/Chapter
 import { ExpertAdviceSection } from '@/components/modules/chapter-home/ExpertAdviceSection';
 import { DeeperNotesSection } from '@/components/modules/chapter-home/DeeperNotesSection';
 import { SectionLessonsGrid } from '@/components/modules/chapter-home/SectionLessonsGrid';
+import { PageContainer } from '@/components/modules/common/PageContainer';
 import type {
   LessonMeta,
   SectionGroup,
@@ -41,12 +42,12 @@ export default function ChapterHomeClient({
   }));
 
   return (
-    <main className='mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10 space-y-6'>
+    <PageContainer>
       <ChapterHeroSection first={first} />
       <ChapterRoadmapSection roadmap={roadmap} first={first} />
       <ExpertAdviceSection />
       <DeeperNotesSection />
       <SectionLessonsGrid sections={normalizedSections} />
-    </main>
+    </PageContainer>
   );
 }

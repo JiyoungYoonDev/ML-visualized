@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { SectionBox } from '@/components/modules/common/SectionBox';
 import { lessonPathFromMeta } from '@/lib/content/paths';
 import type { LessonMeta, RoadmapItem } from './types';
 
@@ -11,7 +12,7 @@ export function ChapterRoadmapSection({
   first: LessonMeta | null;
 }) {
   return (
-    <section className='rounded-2xl border bg-card p-6 md:p-8'>
+    <SectionBox>
       <h2 className='text-xl font-semibold'>Roadmap</h2>
       <p className='mt-2 text-sm text-muted-foreground'>
         아래 순서대로 따라가면 HW1 문제를 풀기 위한 기본 흐름이 잡혀.
@@ -62,6 +63,6 @@ export function ChapterRoadmapSection({
           <Button variant='outline'>Open drills</Button>
         </Link>
       </div>
-    </section>
+    </SectionBox>
   );
 }

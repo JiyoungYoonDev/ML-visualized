@@ -19,6 +19,7 @@ import {
   findModuleLessonEntryByRoute,
   getAllModuleLessonEntries,
 } from '@/lib/content/modules-catalog';
+import { toGroupLabel } from '@/lib/content/labels';
 import LessonFooter from '@/components/lesson/LessonFooter';
 
 import { LatexMath } from '@/components/latex-math';
@@ -193,6 +194,7 @@ export default async function CanonicalLessonPage({
       currentIndex >= 0 && currentIndex < mistakeLessons.length - 1
         ? mistakeLessons[currentIndex + 1]
         : null;
+    const pathLabel = toGroupLabel(group);
 
     return (
       <main className='mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10'>
@@ -200,8 +202,7 @@ export default async function CanonicalLessonPage({
           <div className='space-y-6 lg:col-span-8'>
             <section className='rounded-2xl border bg-card p-6 md:p-8'>
               <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-                Mistake-Bounded · Lesson{' '}
-                {currentIndex >= 0 ? currentIndex + 1 : '-'}
+                {pathLabel} · {String(mistakeLesson.data?.title ?? lesson)}
               </p>
               <h1 className='mt-2 text-3xl font-bold tracking-tight md:text-4xl'>
                 {String(mistakeLesson.data?.title ?? lesson)}
@@ -327,13 +328,25 @@ export default async function CanonicalLessonPage({
   const prev = idx > 0 ? lessons[idx - 1] : undefined;
   const next =
     idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1] : undefined;
+  const isSingleLessonModule = lessons.length === 1;
+  const overviewHref = `/modules/${toPathSegment(target.section)}/${toPathSegment(target.group ?? target.section)}/overview`;
+  const prevLink = prev
+    ? { title: prev.title, href: lessonPathFromMeta(prev) }
+    : isSingleLessonModule
+      ? { title: 'Overview', href: overviewHref }
+      : undefined;
+  const nextLink = next
+    ? { title: next.title, href: lessonPathFromMeta(next) }
+    : isSingleLessonModule
+      ? { title: 'Overview', href: overviewHref }
+      : undefined;
+  const pathLabel = toGroupLabel(target.group ?? target.section);
 
   return (
     <main className='mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10'>
       <section className='rounded-2xl border bg-card p-6 md:p-10'>
         <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-          {String(meta.chapter ?? 'Chapter')} ·{' '}
-          {String(meta.section ?? 'Lesson')}
+          {pathLabel} · {String(meta.title ?? lesson)}
         </p>
 
         <h1 className='mt-2 text-3xl font-bold tracking-tight md:text-4xl'>
@@ -388,18 +401,10 @@ export default async function CanonicalLessonPage({
       </div>
 
       <LessonFooter
-        chapter={chapterKey}
+        chapter={pathLabel}
         slug={lesson}
-        prev={
-          prev
-            ? { title: prev.title, href: lessonPathFromMeta(prev) }
-            : undefined
-        }
-        next={
-          next
-            ? { title: next.title, href: lessonPathFromMeta(next) }
-            : undefined
-        }
+        prev={prevLink}
+        next={nextLink}
       />
     </main>
   );

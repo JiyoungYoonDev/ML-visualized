@@ -1,7 +1,5 @@
-import ChapterHomeClient from '@/components/modules/ChapterHomeClient';
-import { getModulesHomeData } from '@/lib/content/modules-home';
+import { redirect } from 'next/navigation';
 
 export default async function ModulesHomePage() {
-  const { sections, first } = await getModulesHomeData();
-  return <ChapterHomeClient sections={sections} first={first} />;
+  redirect('/');
 }

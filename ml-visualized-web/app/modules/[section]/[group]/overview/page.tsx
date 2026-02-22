@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import MistakeBoundedHomeClient from '@/components/modules/MistakeBoundedHomeClient';
+import { getCustomOverview } from '@/components/modules/custom-overviews';
+import { HeroCard } from '@/components/modules/common/HeroCard';
+import { PageContainer } from '@/components/modules/common/PageContainer';
+import { SectionBox } from '@/components/modules/common/SectionBox';
+import LessonFooter from '@/components/lesson/LessonFooter';
 import { getAllModuleLessons } from '@/lib/content/modules-catalog';
+import { toGroupLabel } from '@/lib/content/labels';
 import { lessonPathFromMeta, toPathSegment } from '@/lib/content/paths';
 
 type LessonCard = {
@@ -27,10 +32,6 @@ export default async function GroupOverviewPage({
 }) {
   const { section, group } = await params;
 
-  if (section === 'machine-learning' && group === 'mistake-bounded') {
-    return <MistakeBoundedHomeClient />;
-  }
-
   const moduleLessons = await getAllModuleLessons();
   const lessons: LessonCard[] = moduleLessons
     .filter(
@@ -47,35 +48,27 @@ export default async function GroupOverviewPage({
       href: lessonPathFromMeta(lesson),
     }));
 
+  const firstLesson = lessons[0];
+  const customOverview = getCustomOverview({
+    section,
+    group,
+    firstLesson,
+  });
+  if (customOverview) return customOverview;
+
   if (lessons.length === 0) {
     notFound();
   }
 
-  const first = lessons[0];
-
   return (
-    <main className='mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10 space-y-6'>
-      <section className='rounded-2xl border bg-card p-6 md:p-8'>
-        <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-          Module Overview
-        </p>
-        <h1 className='mt-2 text-3xl font-bold tracking-tight md:text-4xl'>
-          {titleCase(group)}
-        </h1>
-        <p className='mt-3 text-sm text-muted-foreground'>
-          이 그룹의 학습 개요입니다. 아래 순서대로 lesson을 진행하세요.
-        </p>
-        <div className='mt-5'>
-          <Link
-            href={first.href}
-            className='inline-flex rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted/50'
-          >
-            Start with {first.title}
-          </Link>
-        </div>
-      </section>
+    <PageContainer>
+      <HeroCard
+        eyebrow={`${toGroupLabel(group)} · Overview`}
+        title={titleCase(group)}
+        description={`This is the learning overview for ${titleCase(group)}. I recommend reading them in the following order.`}
+      />
 
-      <section className='rounded-2xl border bg-card p-6 md:p-8'>
+      <SectionBox>
         <h2 className='text-xl font-semibold'>Lessons</h2>
         <div className='mt-4 grid gap-3 sm:grid-cols-2'>
           {lessons.map((lesson, index) => (
@@ -96,7 +89,20 @@ export default async function GroupOverviewPage({
             </Link>
           ))}
         </div>
-      </section>
-    </main>
+      </SectionBox>
+
+      <LessonFooter
+        chapter={toGroupLabel(group)}
+        slug={`${section}-${group}-overview`}
+        next={
+          firstLesson
+            ? {
+                title: firstLesson.title,
+                href: firstLesson.href,
+              }
+            : undefined
+        }
+      />
+    </PageContainer>
   );
 }

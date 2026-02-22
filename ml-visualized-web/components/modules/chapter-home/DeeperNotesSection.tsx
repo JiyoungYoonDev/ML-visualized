@@ -7,12 +7,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { SectionBox } from '@/components/modules/common/SectionBox';
 
 export function DeeperNotesSection() {
   const [showTarget, setShowTarget] = useState(false);
 
   return (
-    <section className='rounded-2xl border bg-card p-6 md:p-8'>
+    <SectionBox>
       <div className='flex items-center justify-between gap-3'>
         <h2 className='text-xl font-semibold'>Deeper Notes</h2>
         <div className='flex items-center gap-3'>
@@ -84,6 +85,6 @@ export function DeeperNotesSection() {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </section>
+    </SectionBox>
   );
 }

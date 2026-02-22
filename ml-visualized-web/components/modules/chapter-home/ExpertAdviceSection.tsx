@@ -1,9 +1,10 @@
 import { LatexMath } from '@/components/latex-math';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SectionBox } from '@/components/modules/common/SectionBox';
 
 export function ExpertAdviceSection() {
   return (
-    <section className='rounded-2xl border bg-card p-6 md:p-8'>
+    <SectionBox>
       <h2 className='text-xl font-semibold'>Predicting from Expert Advice</h2>
       <p className='mt-3 text-sm leading-7 text-muted-foreground'>
         (예시) online learning에서는 매 라운드마다 예측 → 정답 공개 → 업데이트를
@@ -59,6 +60,6 @@ export function ExpertAdviceSection() {
           </div>
         </TabsContent>
       </Tabs>
-    </section>
+    </SectionBox>
   );
 }
