@@ -20,9 +20,6 @@ export function lessonPathFromMeta(
 ) {
   const section = toPathSegment(meta.section ?? 'lectures');
   const group = toPathSegment(meta.group ?? meta.section ?? 'lectures');
-  if (section === group) {
-    return `/modules/${section}/${meta.slug}`;
-  }
   return `/modules/${section}/${group}/${meta.slug}`;
 }
 
@@ -31,9 +28,6 @@ export function overviewPathFromMeta(
 ) {
   const section = toPathSegment(meta.section ?? 'lectures');
   const group = toPathSegment(meta.group ?? meta.section ?? 'lectures');
-  if (section === group) {
-    return `/modules/${section}/overview`;
-  }
   return `/modules/${section}/${group}/overview`;
 }
 

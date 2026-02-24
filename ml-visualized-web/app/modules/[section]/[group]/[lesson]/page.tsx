@@ -155,7 +155,7 @@ export async function generateStaticParams() {
   ];
 }
 
-export default async function CanonicalLessonPage({
+export default async function Page({
   params,
 }: {
   params: Promise<{ section: string; group: string; lesson: string }>;

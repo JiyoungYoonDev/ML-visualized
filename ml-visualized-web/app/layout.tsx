@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist_Mono, Inter } from 'next/font/google';
+import PerformanceMeasureGuard from '@/components/PerformanceMeasureGuard';
 import './globals.css';
 import 'katex/dist/katex.min.css';
 
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <PerformanceMeasureGuard />
         {children}
       </body>
     </html>

@@ -220,7 +220,7 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default async function CanonicalFeaturePage({
+export default async function Page({
   params,
 }: {
   params: Promise<{
