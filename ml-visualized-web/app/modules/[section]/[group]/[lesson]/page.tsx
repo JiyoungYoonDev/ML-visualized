@@ -32,7 +32,11 @@ import {
   PipelineStep,
   PipelineSteps,
 } from '@/components/lesson/PipelineThreeSteps';
-import { Takeaway, TakeawayItem } from '@/components/lesson/Takeaway';
+import {
+  Takeaway,
+  TakeawayItem,
+  TakeawayLeadList,
+} from '@/components/lesson/Takeaway';
 import {
   ReadingNotation,
   ReadingNotationItem,
@@ -376,6 +380,7 @@ export default async function Page({
                 PipelineStep,
                 Takeaway,
                 TakeawayItem,
+                TakeawayLeadList,
                 ReadingNotation,
                 ReadingNotationItem,
                 NotationGuide,

@@ -40,20 +40,29 @@ icon: 'LineChart'
 <Seperator />
 
 <Takeaway>
-  <TakeawayItem value='concept-mastery' title='Concept Mastery'>
-    <div className='space-y-3'>
-      <p className="text-sm sm:text-base">
-        Logistic regression definition and how it differs from a plain linear regression:
-      </p>
-      <ul className='list-disc pl-5 space-y-2 text-sm sm:text-base'>
-        <li>Logistic regression is a classification model that predicts probabilities (ranging from 0 to 1) based on input x.</li>
-        <li>Linear regression predicts a continuous numerical value (e.g., house prices).</li>
-        <li>Logistic regression predicts the likelihood of an event (e.g., rain, spam, disease).</li>
-        <li>Key advantage: It provides a <strong>confidence level</strong> for the prediction.</li>
-      </ul>
-    </div>
-  </TakeawayItem>
-
+  <TakeawayLeadList
+    title='Concept Mastery'
+    intro='Logistic regression definition and how it differs from a plain linear regression:'
+  >
+    <ul>
+      <li>
+        Logistic regression is a classification model that predicts
+        probabilities (ranging from 0 to 1) based on input x.
+      </li>
+      <li>
+        Linear regression predicts a continuous numerical value (e.g., house
+        prices).
+      </li>
+      <li>
+        Logistic regression predicts the likelihood of an event (e.g., rain,
+        spam, disease).
+      </li>
+      <li>
+        Key advantage: It provides a <strong>confidence level</strong> for the
+        prediction.
+      </li>
+    </ul>
+  </TakeawayLeadList>
 <TakeawayItem value='why-logistic' title='Why Logistic?'>
   <div className='space-y-3 text-sm sm:text-base'>
     <p>

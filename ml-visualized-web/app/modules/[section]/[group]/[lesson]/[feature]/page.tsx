@@ -28,7 +28,11 @@ import {
   PipelineStep,
   PipelineSteps,
 } from '@/components/lesson/PipelineThreeSteps';
-import { Takeaway, TakeawayItem } from '@/components/lesson/Takeaway';
+import {
+  Takeaway,
+  TakeawayItem,
+  TakeawayLeadList,
+} from '@/components/lesson/Takeaway';
 import {
   ReadingNotation,
   ReadingNotationItem,
@@ -420,7 +424,7 @@ export default async function Page({
         )}
       </section>
 
-      <section className='mt-6 rounded-2xl border bg-card p-5 md:p-8'>
+      <section className='mt-4 rounded-2xl border bg-card p-4 md:p-6'>
         <Tabs value={feature} className='w-full'>
           <TabsList className='inline-flex h-auto w-fit flex-wrap justify-start'>
             {features.map((item) => (
@@ -432,9 +436,9 @@ export default async function Page({
             ))}
           </TabsList>
 
-          <SectionSeparator className='mt-4' />
+          <SectionSeparator className='mt-3' />
 
-          <TabsContent value={feature} className='mt-4'>
+          <TabsContent value={feature} className='mt-3'>
             <div className='grid gap-6 lg:grid-cols-[minmax(0,1fr)_240px]'>
               <div className='prose prose-zinc dark:prose-invert max-w-none'>
                 <MDXRemote
@@ -450,6 +454,7 @@ export default async function Page({
                     PipelineStep,
                     Takeaway,
                     TakeawayItem,
+                    TakeawayLeadList,
                     ReadingNotation,
                     ReadingNotationItem,
                     NotationGuide,
