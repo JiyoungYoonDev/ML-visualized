@@ -9,7 +9,6 @@ type MathProps = {
 
 export function LatexMath({ math, block = false, className }: MathProps) {
   const safeMath = typeof math === 'string' ? math : String(math ?? '');
-
   if (!safeMath.trim()) {
     return null;
   }

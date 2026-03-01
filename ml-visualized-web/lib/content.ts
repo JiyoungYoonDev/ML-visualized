@@ -88,6 +88,8 @@ function normalizeMeta(slug: string, data: any): LessonMeta {
     group: data?.group ? String(data.group) : undefined,
     order: Number.isFinite(Number(data?.order)) ? Number(data.order) : 9999,
     summary: data?.summary ? String(data.summary) : undefined,
+    code: data?.code ? String(data.code) : undefined,
+    // codeBlock: data?.codeBlock ? String(data.codeBlock) : undefined,
     navLabel: data?.navLabel ? String(data.navLabel) : undefined,
     iconKey: data?.iconKey
       ? String(data.iconKey)

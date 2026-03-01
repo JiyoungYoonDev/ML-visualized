@@ -62,6 +62,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SigmoidClampDemo } from '@/components/lesson/simulators/SigmoidClampDemo';
 import { DecisionBoundaryPlot } from '@/components/lesson/simulators/DecisionBoundaryPlot';
 import GraphPlot from '@/components/lesson/simulators/GraphPlot';
+import { InterviewQuestion } from '@/components/modules/common/InterViewQuestion';
 
 type TocItem = {
   id: string;
@@ -476,6 +477,7 @@ export default async function Page({
                     h2: Heading2,
                     h3: Heading3,
                     p: Paragraph,
+                    InterviewQuestion
                   }}
                 />
               </div>

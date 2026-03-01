@@ -1,0 +1,63 @@
+---
+title: 'Technical Interview Preparation'
+summary: 'Learn about the Objective Oriented Programming'
+icon: 'Code'
+group: 'Java Study'
+section: 'Technical Interview Preparation'
+order: 1
+---
+
+<InterviewQuestion
+  question='What is the Java runtime environment and how does it work?'
+  answer='The Java Runtime Environment (JRE) is a software package that provides the necessary libraries, Java Virtual Machine (JVM), and other components to run Java applications. 
+  It works by converting Java bytecode into machine code that can be executed by the host operating system. 
+  The JVM also manages memory, handles exceptions, and provides security features to ensure safe execution of Java programs.'
+  imageSrc='/images/JDK.png'
+  imageAlt='JDK runtime overview'
+>
+  <div>
+    <ul className='list-disc pl-5 space-y-4 mb-4'>
+      <li>
+        <strong>JRE (Java Runtime Environment):</strong> JRE is a software
+        package that provides the necessary libraries, Java Virtual Machine
+        (JVM), and other components to run Java applications. It allows users to
+        run Java applications on their devices without needing to install the
+        full Java Development Kit (JDK).
+      </li>
+      <li>
+        <strong>JVM (Java Virtual Machine):</strong> JVM is a virtual machine
+        that runs Java bytecode. It provides a platform-independent execution
+        environment, allowing Java applications to run on any device or
+        operating system that has a compatible JVM.
+      </li>
+      <li>
+        <strong>JDK (Java Development Kit):</strong> JDK is a software
+        development kit that includes the JRE and additional tools for
+        developing Java applications, such as the Java compiler (javac) and
+        debugging tools. It is used by developers to create, compile, and debug
+        Java applications.
+      </li>
+    </ul>
+    <Seperator />
+    <div className='mt-2 p-4'>
+      <p>
+        <strong>How it works:</strong>
+        Let's say we write a code in Java and compile using JAVAC compiler, it
+        will genereate Byte Code .class file. When we run the code using java
+        command, JVM will load the .class file and execute the bytecode. Then
+        JVM will convert the bytecode into machine code that can be executed by
+        the host operating system, and it will manage memory, handle exceptions,
+        and provide security features to ensure safe execution of Java programs.
+      </p>
+    </div>
+    <div className='mt-2 p-4 bg-slate-900 text-white rounded-sm text-xs font-mono'>
+      <strong>Process:</strong> Source (.java) → JAVAC → Bytecode (.class) → JVM
+      Load → Machine Code Execution.
+    </div>
+    <div className='mt-2 p-4 '>
+      <strong>Good To Know:</strong>
+      JRE does not include development tools like the Java compiler (javac) or
+      debugging tools, which are part of the JDK.
+    </div>
+  </div>
+</InterviewQuestion>

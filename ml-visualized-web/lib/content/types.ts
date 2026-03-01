@@ -9,6 +9,7 @@ export type LessonMeta = {
   group?: string;
   order: number;
   summary?: string;
+  code?: string;
   navLabel?: string;
   iconKey?: string;
   badge?: string;

@@ -54,7 +54,7 @@ import {
   PrerequisiteLink,
   Prerequisites,
 } from '@/components/lesson/Prerequisites';
-
+import { InterviewQuestion } from '@/components/modules/common/InterViewQuestion';
 import {
   Accordion,
   AccordionContent,
@@ -324,6 +324,28 @@ export default async function Page({
 
   const { meta, content } = await getLessonBySlug(chapterKey, lesson);
 
+  const metaCode = typeof meta.code === 'string' ? meta.code : '';
+  const InterviewQuestionWithCode = (
+    props: React.ComponentProps<typeof InterviewQuestion>,
+  ) => {
+    const resolvedCodeBlock =
+      typeof props.codeBlock === 'string' && props.codeBlock.trim()
+        ? props.codeBlock
+        : undefined;
+    const resolvedCode =
+      typeof props.code === 'string' && props.code.trim()
+        ? props.code
+        : undefined;
+    const fallbackCode = metaCode.trim() ? metaCode : undefined;
+
+    return (
+      <InterviewQuestion
+        {...props}
+        codeBlock={resolvedCodeBlock ?? resolvedCode ?? fallbackCode}
+      />
+    );
+  };
+
   if (await hasLessonIntroduction(chapterKey, lesson)) {
     redirect(featurePathFromMeta(meta, 'introduction'));
   }
@@ -399,6 +421,7 @@ export default async function Page({
                 Seperator: SectionSeparator,
                 p: Paragraph,
                 DecisionBoundaryPlot,
+                InterviewQuestion: InterviewQuestionWithCode,
               }}
             />
           </div>
